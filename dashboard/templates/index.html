@@ -1,0 +1,159 @@
+{% extends "layouts/_layout_project.html" %}
+{% load static i18n %}
+
+{% block title %} Project :: Index{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-md-6 col-xl-3">
+            <div class="widget-rounded-circle card q-shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-lg rounded-circle bg-soft-primary">
+                                <i class="fe-tag font-22 avatar-title text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <h3 class="text-dark mt-1"><span data-plugin="counterup">3,947</span></h3>
+                                <p class="text-muted mb-1 text-truncate">Tickets Totales</p>
+                            </div>
+                        </div>
+                    </div> <!-- end row-->
+                </div>
+            </div> <!-- end widget-rounded-circle-->
+        </div> <!-- end col-->
+        <div class="col-md-6 col-xl-3">
+            <div class="widget-rounded-circle card q-shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-lg rounded-circle bg-soft-success">
+                                <i class="fe-check-circle font-22 avatar-title text-success"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <h3 class="text-dark mt-1"><span data-plugin="counterup">3195</span></h3>
+                                <p class="text-muted mb-1 text-truncate">Tickets Finalizados</p>
+                            </div>
+                        </div>
+                    </div> <!-- end row-->
+                </div>
+            </div> <!-- end widget-rounded-circle-->
+        </div> <!-- end col-->
+        <div class="col-md-6 col-xl-3">
+            <div class="widget-rounded-circle card q-shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-lg rounded-circle bg-soft-warning">
+                                <i class="fe-clock font-22 avatar-title text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <h3 class="text-dark mt-1"><span data-plugin="counterup">624</span></h3>
+                                <p class="text-muted mb-1 text-truncate">Tickets Por Resolver</p>
+                            </div>
+                        </div>
+                    </div> <!-- end row-->
+                </div>
+            </div> <!-- end widget-rounded-circle-->
+        </div> <!-- end col-->
+        <div class="col-md-6 col-xl-3">
+            <div class="widget-rounded-circle card q-shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-lg rounded-circle bg-soft-danger border-danger border">
+                                <i class="fe-eye font-22 avatar-title text-danger"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <h3 class="mt-1"><span data-plugin="counterup">78,412</span></h3>
+                                <p class="text-muted mb-1 text-truncate">Tickets Por Aprovar</p>
+                            </div>
+                        </div>
+                    </div> <!-- end row-->
+                </div>
+            </div> <!-- end widget-rounded-circle-->
+        </div> <!-- end col-->
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card q-shadow-sm" style="min-height: 60vh;">
+                <div class="card-body">
+                    <h4 class="header-title mb-4">Tickets Abiertos</h4>
+                    <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>No. Ticket</th>
+                                <th>Titulo</th>
+                                <th>Proyecto</th>
+                                <th>Cliente</th>
+                                <th>Fecha Apertura</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                    
+                    
+                        <tbody>
+                            <tr>
+                                <td><a href="">Tiger Nixon</a> </td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011/04/25</td>
+                                <td>$320,800</td>
+                            </tr>
+                            <tr>
+                                <td><a href="">Tiger Nixon</a> </td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>63</td>
+                                <td>2011/07/25</td>
+                                <td>$170,750</td>
+                            </tr>
+                            <tr>
+                                <td><a href="">Tiger Nixon</a> </td>
+                                <td>Junior Technical Author</td>
+                                <td>San Francisco</td>
+                                <td>66</td>
+                                <td>2009/01/12</td>
+                                <td>$86,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    <!-- end row-->
+
+    
+
+
+
+    
+
+
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+
+{% endblock%}
+

@@ -1,0 +1,76 @@
+{% extends "layouts/_layout_project.html" %}
+{% load static i18n %}
+{% load humanize %}
+
+{% block title %} Project :: Notification{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Table Container -->
+    <div class="row">
+        <div class="col-md-3 col-sm-1">
+
+        </div>
+
+        <div class="card q-shadow-sm mt-3 col-md-5 col-sm-10 border-sm">
+
+            <div class="row flex-row flex-nowrap align-items-center p-0">
+                <!-- Title -->
+                <div class="col-8 text-start mt-3 mb-2 ps-4">
+                    <div>
+                        <h3 class="header-title mb-1" style="font-size: 3vh; color:#000 !important"><b>Notificaciones</b> </h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Table -->
+            <div class="row">
+
+                <div class="col-12 ps-3 pe-4">
+                <div class="inbox-widget" data-simplebar="init" style="min-height:70vh;">
+                    <div class="simplebar-wrapper" style="margin: 0px;">
+                        <div class="simplebar-height-auto-observer-wrapper">
+                            <div class="simplebar-height-auto-observer"></div>
+                        </div>
+                        <div class="simplebar-mask">
+                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;">
+                                    <div class="simplebar-content" style="padding: 0px;">
+                                        {% for notification in notifications %}
+                                            <div class="inbox-item">
+                                                <a href="{{ notification.url }}" class="dropdown-item notify-item" title="{{ notification.description }}">
+                                                    <div class="inbox-item-img"><span class="material-symbols-outlined rounded-circle">mark_chat_unread</span></div>
+                                                    <h5 class="mt-0">{{ notification.title }} <small class="text-muted">{{ notification.created_at|naturaltime }}</small></h5>
+                                                    <p>{{ notification.description }}</p>
+                                                </a>
+                                            </div>
+                                        {% endfor %}                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="simplebar-placeholder" style="width: auto; height: 445px;"></div>
+                    </div>
+                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                        <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                    </div>
+                    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                        <div class="simplebar-scrollbar" style="height: 372px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                    </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+
+{% endblock%}
+

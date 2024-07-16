@@ -1,0 +1,172 @@
+:root {
+
+    /* Color  del contenido de la pagina */
+    --color-content:#f5f6f8;
+    
+    /* Colores para el sidebar*/
+    --color-sidebar:#3bc0a3;
+    --color-sidebar-font:#ffffff;
+
+    /* Colores para el sidebar secundario*/
+    --color-sidebar-two:#ffffff;
+    --color-sidebar-two-font-title:#adb5bd;
+    
+    /* Colores para los items del sidebar secundario*/
+    --color-sidebar-two-font-item:#8d8d8d;
+    --color-sidebar-two-font-item-hover:#3bc0a3;
+
+    /* Colores para la topbar*/
+    --color-navbar:#ffffff;
+    --color-navbar-font:#fff;
+
+    /* Colores para las notificaciones*/
+    --color-notification:#3bc0a3;
+
+    /* Colores para los textos dentro del contenido de la pagina*/
+    --color-title-content:#000000;
+
+    /* Colores para los botones y alertas*/
+    --color-principal:#3bc0a3;
+    --color-principal-hover:#21927a;
+    --color-principal-font:#ffffff;
+
+    --color-secundario:#dad732;
+    --color-secundario-hover:#b9b720;
+    --color-secundario-font:#ffffff;
+
+    --color-terceario:#b11d1d;
+    --color-terceario-hover:#8d1010;
+    --color-terceario-font:#ffffff;
+
+    /* Lightgrey */
+    --q-lightgrey-4: #dbdbdb;    
+}
+
+
+
+
+
+.content-color{
+    background-color: var(--color-content) !important;
+}
+
+.sidebar-color{
+    background-color: var(--color-sidebar) !important;
+    color: var(--color-sidebar-font) !important;
+}
+
+.sidebar2-color{
+    background-color: var(--color-sidebar-two) !important;
+}
+
+.sidebar2-color h5 {
+    color: var(--color-sidebar-two-font-title) !important;
+}
+
+.sidebar2-color a {
+    color: var(--color-sidebar-two-font-item) !important;
+    font-weight: 500;
+}
+
+.sidebar2-color a:hover, .sidebar2-color a:visited, .sidebar2-color a:active {
+    color: var(--color-sidebar-two-font-item-hover) !important;
+}
+
+.page-title-box h4{
+    color: var(--color-title-content) !important;
+}
+
+
+.color-principal{
+    background-color: var(--color-principal);
+    color: var(--color-principal-font);
+}
+
+.color-secundario{
+    background-color: var(--color-secundario);
+    color: var(--color-secundario-font);
+}
+
+.color-terceario{
+    background-color: var(--color-terceario);
+    color: var(--color-terceario-font);
+}
+
+
+
+
+/**************************************/
+/* Shadows
+/**************************************/
+.q-shadow {
+    box-shadow: 0.9rem 0.9rem 1rem var(--q-lightgrey-4) !important;
+}
+
+.q-shadow-xs {
+    box-shadow: 0 0 5px var(--q-lightgrey-4) !important;
+}
+
+.q-shadow-sm {
+    box-shadow: 1.5rem 1.5rem 0.8rem var(--q-lightgrey-4) !important;
+}
+
+.q-shadow-lg {
+    box-shadow: 1px 1px 2rem var(--q-lightgrey-4) !important;
+}
+
+.border-sm{
+    border-radius: 0.5rem;
+}
+
+
+/**************************************/
+/* projectapp Button
+/***************************************/
+.projectapp-button{
+    border: 0px solid;
+    border-radius: 30px;
+    padding: 0.7rem 2rem !important;
+    margin-right: 10px;
+    box-shadow: 0 0 20px 1px #e5e5e5;
+    width: 150px;
+    height: 45px;
+}
+
+.hover-principal:hover,
+.hover-principal:active,
+.hover-principal:focus {
+    background: var(--color-principal-hover) !important;
+    color: rgb(238, 238, 238) !important;
+}
+
+
+.hover-secundario:hover,
+.hover-secundario:active,
+.hover-secundario:focus {
+    background: var(--color-secundario-hover) !important;
+    color: rgb(238, 238, 238) !important;
+}
+
+.hover-terceario:hover,
+.hover-terceario:active,
+.hover-terceario:focus {
+    background: var(--color-terceario-hover) !important;
+    color: rgb(238, 238, 238) !important;
+}
+
+
+
+.select2-container .select2-selection--single {
+    border: 1px solid #ced4da !important;
+    height: calc(1.5em + 0.9rem + 2px) !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    color: #6c757d !important;
+    text-align: left !important;
+}

@@ -1,0 +1,149 @@
+{% load static i18n %}
+<!-- Topbar Start -->
+<div class="navbar-custom" style="background-color: var(--color-navbar) !important; color: var(--color-navbar-font) !important;">
+    <div class="container-fluid">
+        <ul class="list-unstyled topnav-menu float-end mb-0">
+            <li class="dropdown notification-list topbar-dropdown">
+                <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false" id="notifications_content">
+                    <i class="fe-bell noti-icon"></i>
+                    <span class="badge rounded-circle noti-icon-badge" style="background-color:var(--color-notification) !important;"></span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end dropdown-lg">
+                    <div class="dropdown-item noti-title">
+                        <h5 class="m-0">
+                            <span class="float-end">
+                                <a href="" class="text-dark">
+                                    <small>Borrar Todo</small>
+                                </a>
+                            </span>Notificaciones
+                        </h5>
+                    </div>
+
+                    <div class="noti-scroll" style="max-height: 300px; overflow-y: auto;">
+                        <!-- All-->
+                    </div>
+                    
+                    <a href="{% url 'notification:list' %}" class="dropdown-item text-center text-primary notify-item notify-all">
+                        Ver Todas
+                        <i class="fe-arrow-right"></i>
+                    </a>
+                </div>
+            </li>
+
+            <li class="dropdown notification-list topbar-dropdown">
+                <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <img src="{% static 'images/users/user-1.jpg' %}"  alt="user-image" class="rounded-circle">
+                    <span class="pro-user-name ms-1">
+                        Jonathan <i class="mdi mdi-chevron-down"></i> 
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
+                    <!-- item-->
+                    <div class="dropdown-header noti-title">
+                        <h6 class="text-overflow m-0">!Bienvenido!</h6>
+                    </div>
+    
+                    <!-- item-->
+                    <a href="{% url 'user:profile' %}" class="dropdown-item notify-item">
+                        <i class="fe-user"></i>
+                        <span>Mi cuenta</span>
+                    </a>
+    
+                    <!-- item-->
+                    <a href="{% url 'user:profile_edit' %}" class="dropdown-item notify-item">
+                        <i class="fe-settings"></i>
+                        <span>Ajustes</span>
+                    </a>
+                    
+                    <!-- item-->
+                    <a href="{% url 'account_change_password' %}" class="dropdown-item notify-item">
+                        <i class="fe-lock"></i>
+                        <span>Cambiar Contraseña</span>
+                    </a>
+    
+                    <div class="dropdown-divider"></div>
+    
+                    <!-- item-->
+                    <a href="{% url 'account_logout' %}" class="dropdown-item notify-item">
+                        <i class="fe-log-out"></i>
+                        <span>Salir</span>
+                    </a>
+    
+                </div>
+            </li>
+        </ul>
+    
+        <!-- LOGO -->
+        <div class="logo-box sidebar2-color">
+            <a href="{% url 'index' %}" class="logo logo-dark text-center">
+                <span class="logo-sm">
+                    <img src="{% static 'images/logo-sm.png' %}"  alt="" height="22">
+                    <!-- <span class="logo-lg-text-light">UBold</span> -->
+                </span>
+                <span class="logo-lg">
+                    {% comment %} <img src="{% static 'images/logo.png' %}"  alt="" height="20"> {% endcomment %}
+                    <!-- <span class="logo-lg-text-light">U</span> -->
+                </span>
+            </a>
+        </div>
+        <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+            <li>
+                <button class="button-menu-mobile waves-effect waves-light">
+                    <i class="fe-menu"></i>
+                </button>
+            </li>
+
+            <li>
+                <!-- Mobile menu toggle (Horizontal Layout)-->
+                <a class="navbar-toggle nav-link" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                    <div class="lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </a>
+                <!-- End mobile menu toggle-->
+            </li>   
+            {% if perms.publicacion.view_user %}
+                <li class="dropdown d-none d-xl-block">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        Administracion
+                        <i class="mdi mdi-chevron-down"></i> 
+                    </a>
+                    <div class="dropdown-menu">
+                        <!-- item-->
+                        <a href="{% url 'user:list' %}" class="dropdown-item">
+                            <i class="fe-user me-1"></i>
+                            <span>Usuarios</span>
+                        </a>
+
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="fe-users me-1"></i>
+                            <span>Roles</span>
+                        </a>
+        
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="fe-bar-chart-line- me-1"></i>
+                            <span>Tableros</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+        
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="fe-headphones me-1"></i>
+                            <span>Ayuda & Soporte</span>
+                        </a>
+        
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<!-- end Topbar -->
+
+        

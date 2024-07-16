@@ -1,0 +1,69 @@
+{% extends "layouts/_layout_project.html" %}
+{% load static i18n %}
+
+{% block title %} Project :: Profile Edit{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Table Container -->
+    <div class="row">
+        <div class="card q-shadow-sm mt-3 col-md-5 col-sm-10 border-sm offset-md-3 offset-sm-1">
+
+            <div class="row flex-row flex-nowrap align-items-center p-0">
+                <!-- Title -->
+                <div class="col-8 text-start mt-3 mb-2 ps-4">
+                    <div>
+                        <h3 class="header-title mb-1" style="font-size: 3vh; color:#000 !important"><b>Editar Perfil</b> </h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Table -->
+            <div class="row">
+
+                <div class="col-12 ps-3 pe-4">
+                    <div class="inbox-widget" data-simplebar="init">
+
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <img src="{% static 'images/users/user.png' %}" class="rounded-circle avatar-lg img-thumbnail"
+                                alt="profile-image">
+
+                                <h4 class="mb-0">{{user.first_name}}</h4>
+                                <p class="text-muted">@{{user.username}}</p>
+
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="text-start mt-3">
+                                        <p class="text-muted mb-2 font-13"><strong>Nombres :</strong> <span class="ms-2"><input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}"></span></p>
+
+                                        <p class="text-muted mb-2 font-13"><strong>Apellidos:</strong> <span class="ms-2"><input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}"></span></p>
+                                    
+                                        <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ms-2"><input type="text" class="form-control" disabled value="{{ user.email }}"></span></p>
+                                    
+                                        <p class="text-muted mb-2 font-13"><strong>Se Unio :</strong> <span class="ms-2"><input type="text" class="form-control" disabled value="{{user.date_joined}}"></span></p>
+
+                                    </div>
+
+                                    <br>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn projectapp-button hover-principal color-principal q-shadow-sm mt-3 press-button">Guardar</button>
+                                    </div>
+                                </form>                                    
+                            </div>                                 
+                        </div> <!-- end card -->
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+
+{% endblock%}
+
