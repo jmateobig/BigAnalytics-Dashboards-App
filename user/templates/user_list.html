@@ -19,12 +19,13 @@
                             </a>
                         </div>
                     </div>
-                    <table id="data-table" class="table dt-responsive nowrap w-100">
+                    <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
+                                <th>id</th>
+                                <th>username</th>
+                                <th>email</th>
+                                <th>is_active</th>
                             </tr>
                         </thead>
                     </table>
@@ -40,6 +41,23 @@
 
 
 {% block extra_javascript %}
+<script src="{% static 'js/pages/dataTables.init.js' %}"></script>
+<script>
+    //Url de la peticion  Ajax
+    var path = "{% url 'user:get_list' %}";
 
+    // Definir las columnas del datatable en el ajax
+    var columnas = [
+        { data: 'id' },
+        { data: 'username' },
+        { data: 'email' },
+        { data: 'is_active' },
+    ];
+
+    //Pintar el datatable
+    document.addEventListener('DOMContentLoaded', async function () {
+        loadTableData(path, columnas);
+    });
+</script>
 {% endblock%}
 

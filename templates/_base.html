@@ -15,8 +15,10 @@
         <link rel="icon" href="{% static 'icons/favicon.ico' %}">
 
         <!--Data Tables-->
-        <link href="{% static 'libs/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
-
+        <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'libs/datatables.net-select-bs4/css//select.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
         
         <!-- App css -->
         <link href="{% static 'css/config/saas/bootstrap.css' %}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
@@ -66,36 +68,25 @@
         <!--Notificaciones-->
         <script src="{% static 'js/personalized/get_notification.js' %}"></script>
         <script src="{% static 'js/personalized/press_button.js' %}"></script>
-
-        <!-- DataTables -->
-        <script src="{% static 'libs/datatables/js/jquery.dataTables.min.js' %}"></script>
-        <script src="{% static 'js/personalized/datatables.init.js' %}"></script>
-
-
-        <script>
-            var url = "{% url 'user:get_list' %}";
-
-            // Definir las columnas del datatable en el ajax
-            var columns = [
-                { data: 'id' },
-                { data: 'username' },
-                { data: 'email' },
-            ];
-
-            var beforeSend = function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));};
-
-
-            //Pintar el datatable
-            document.addEventListener('DOMContentLoaded', async function () {
-                loadTableData();
-            });
-        </script>
-
-
-
-
+        <script src="{% static 'js/personalized/translate_datatable.js' %}"></script>
+        
+        <!-- third party js -->
+        <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-select/js/dataTables.select.min.js' %}"></script>
+        <script src="{% static 'js/personalized/get_cookie.js' %}"></script>
 
         <script>$('[data-toggle="select2"]').select2();</script>
+
+        
         {% endblock javascript %}
 
 

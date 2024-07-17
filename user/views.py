@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
@@ -57,7 +59,7 @@ class ProfileEditView(LoginRequiredMixin, TemplateView):
         messages.success(request, '¡Perfil actualizado con éxito!')
         return redirect('user:profile')
     
-
+# @method_decorator(csrf_exempt, name='dispatch')
 class UserListJsonView(View):
     def post(self, request, *args, **kwargs):
         draw = int(request.POST.get('draw', 0))
