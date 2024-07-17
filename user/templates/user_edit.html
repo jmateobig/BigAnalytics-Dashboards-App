@@ -1,5 +1,7 @@
 {% extends "layouts/_layout_project.html" %}
+
 {% load static i18n %}
+{% load crispy_forms_tags %}
 
 {% block title %} Project :: Editar{% endblock title %}
 
@@ -7,37 +9,24 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="card q-shadow-sm mt-3 col-md-5 col-sm-10 border-sm offset-md-3 offset-sm-1">
+        <div class="card q-shadow-sm mt-3 col-md-6 col-sm-10 border-sm offset-md-3 offset-sm-1">
 
             <div class="row flex-row flex-nowrap align-items-center p-0">
                 <!-- Title -->
                 <div class="col-8 text-start mt-3 mb-2 ps-4">
                     <div>
-                        <h3 class="header-title mb-1" style="font-size: 3vh; color:#000 !important"><b>Editar Cliente</b> </h3>
+                        <h3 class="header-title mb-1" style="font-size: 3vh; color:#000 !important"><b>Editar al Usuario {{ user.first_name }} {{ user.last_name }}</b> </h3>
                     </div>
                 </div>
             </div>
 
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="mb-3">
-                            <label for="projectname" class="form-label">Cliente</label>
-                            <input type="text" id="projectname" class="form-control" placeholder="Enter project name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="project-overview" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="project-overview" rows="5" placeholder="Enter some brief about project.."></textarea>
-                        </div>
-                    </div> <!-- end col-->
-                </div>
-                <!-- end row -->
-                <div class="row mt-3">
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn projectapp-button hover-principal color-principal q-shadow-sm mt-3 press-button">Guardar</button>
-                    </div>
-                </div>
-
+            <div class="card-body">            
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <a href="{% url 'user:list' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
             </div> <!-- end card-body -->
         </div> <!-- end card-->
     </div>

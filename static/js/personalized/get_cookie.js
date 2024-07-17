@@ -13,4 +13,4 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-var cookie = function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));};
+const cookie = function(xhr, settings) {xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));};

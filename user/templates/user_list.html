@@ -1,63 +1,64 @@
 {% extends "layouts/_layout_project.html" %}
 {% load static i18n %}
 
-{% block title %} Project :: Index{% endblock title %}
+{% block title %} Project :: Usuarios{% endblock title %}
 
 {% block content %}
-
 <div class="container-fluid">
     <div class="row mt-3">
         <div class="col-12">
-            
             <div class="card q-shadow-sm" style="min-height: 60vh;">
                 <div class="card-body">
-
                     <div class="row justify-content-between">
                         <div class="col-md-8">
-                            <a href="{% url 'user:create' %}"  title="Crear Usuario">
-                                <h2 class="mb-4"> Usuarios <i class="fe-plus me-1"></i></h2>
+                            <a href="{% url 'user:create' %}" title="Crear Usuario">
+                                <h2 class="mb-4">Usuarios <i class="fe-plus me-1"></i></h2>
                             </a>
                         </div>
                     </div>
                     <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>id</th>
-                                <th>username</th>
-                                <th>email</th>
-                                <th>is_active</th>
+                                <th>No</th>
+                                <th>Nombre</th>
+                                <th>Usuario</th>
+                                <th>Correo</th>
+                                <th>Estado</th>
+                                <th style="width: 100px !important;">Acciones</th>
                             </tr>
                         </thead>
                     </table>
-
-                </div> <!-- end card body-->
-            </div> <!-- end card -->
-        </div><!-- end col-->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- end row-->
 </div>
-{% endblock %}
 
-
+{% include "modals/info_user.html" %}
+{% include "modals/toggle_status_user.html" %}
+{% endblock content %}
 
 {% block extra_javascript %}
-<script src="{% static 'js/pages/dataTables.init.js' %}"></script>
-<script>
-    //Url de la peticion  Ajax
-    var path = "{% url 'user:get_list' %}";
+<script src="{% static 'js/app/user.js' %}"></script>
 
-    // Definir las columnas del datatable en el ajax
+<script> //GENERAL
+    var url_get_users = "{% url 'user:get_users' %}";
+    var url_get_user = "{% url 'user:get_user' %}";
+    var url_toggle_status_user = "{% url 'user:toggle_status_user' %}";
+
     var columnas = [
-        { data: 'id' },
-        { data: 'username' },
-        { data: 'email' },
-        { data: 'is_active' },
-    ];
+            { data: 'id' },
+            { data: 'full_name' },
+            { data: 'username' },
+            { data: 'email' },
+            { data: 'is_active', render: renderEstado },
+            { data: 'id', render: function (data, type, row) { return renderOpciones(row); } }
+        ];
 
-    //Pintar el datatable
-    document.addEventListener('DOMContentLoaded', async function () {
-        loadTableData(path, columnas);
+    // DATATABLE
+    document.addEventListener('DOMContentLoaded', function () {
+        loadTableData(url_get_users, columnas);
     });
 </script>
-{% endblock%}
 
+{% endblock extra_javascript %}
