@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     "crispy_bootstrap5",
     "django.contrib.humanize",
+    'pwa',
     
     'user',
     'dashboard',
@@ -149,6 +150,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR/"staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -181,3 +183,25 @@ ACCOUNT_FORMS = {
     # 'login': 'user.forms.CustomLoginForm',
     'signup': 'user.forms.CustomSignupForm',
 }
+
+
+PWA_APP_NAME = 'Tu App'
+PWA_APP_DESCRIPTION = "Descripción de tu App"
+PWA_APP_THEME_COLOR = '#73af02'
+PWA_APP_BACKGROUND_COLOR = '#a5d44d'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        'src': 'static/icons/logo.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': 'static/icons/logo.png',
+        'sizes': '192x192'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'es-ES'
+PWA_SERVICE_WORKER_PATH ='static/js/serviceworker.js'

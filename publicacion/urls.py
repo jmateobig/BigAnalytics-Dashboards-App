@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('captcha/', include('captcha.urls')),
+    path('', include('pwa.urls')),
     path('', IndexView.as_view(), name='index'),
 
     path('user/',include('user.urls')),
