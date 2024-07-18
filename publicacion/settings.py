@@ -149,7 +149,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR/"staticfiles"
 
 # Default primary key field type
@@ -187,8 +187,8 @@ ACCOUNT_FORMS = {
 
 PWA_APP_NAME = 'Tu App'
 PWA_APP_DESCRIPTION = "Descripción de tu App"
-PWA_APP_THEME_COLOR = '#73af02'
-PWA_APP_BACKGROUND_COLOR = '#a5d44d'
+PWA_APP_THEME_COLOR = '#3499f'
+PWA_APP_BACKGROUND_COLOR = '#3499f'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_START_URL = '/'
