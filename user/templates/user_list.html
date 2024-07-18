@@ -36,6 +36,7 @@
 
 {% include "modals/info_user.html" %}
 {% include "modals/toggle_status_user.html" %}
+{% include "modals/delete_user.html" %}
 {% endblock content %}
 
 {% block extra_javascript %}
@@ -45,6 +46,7 @@
     var url_get_users = "{% url 'user:get_users' %}";
     var url_get_user = "{% url 'user:get_user' %}";
     var url_toggle_status_user = "{% url 'user:toggle_status_user' %}";
+    var url_delete_user = "{% url 'user:delete_user' %}";
 
     var columnas = [
             { data: 'id' },

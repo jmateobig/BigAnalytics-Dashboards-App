@@ -15,7 +15,7 @@ function renderOpciones(row) {
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verUsuario(${row.id})">Ver</button>
                 <a class="dropdown-item" href="/user/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="toggleUserStatus(${row.id}, '${row.full_name}', ${row.is_active})">${accionTexto}</button>
-                <a class="dropdown-item" href="#">Eliminar</a>
+                <button type="button" class="dropdown-item" onclick="confirmDeleteUser(${row.id}, '${row.full_name}')">Eliminar</button>
             </div>
         </div>
     `;
@@ -29,6 +29,12 @@ function toggleUserStatus(userId, fullName, isActive) {
     $('#modalToggleBody').text(modalBody);
     $('#modalToggleConfirm').data('userId', userId).data('isActive', isActive);
     $('#ModalToggle').modal('show');
+}
+
+function confirmDeleteUser(userId, fullName) {
+    $('#modalEliminarNombre').text(fullName);
+    $('#modalConfirmDelete').data('userId', userId);
+    $('#ModalEliminar').modal('show');
 }
 
 //AJAX
@@ -62,12 +68,12 @@ function verUsuario(userId) {
 
 
 function confirmToggleUserStatus() {
-    const userId = $('#modalToggleConfirm').data('userId');
+    var userIdStatus = $('#modalToggleConfirm').data('userId');
     $.ajax({
         url: url_toggle_status_user,
         type: "POST",
         dataType: "json",
-        data: { user_id: userId },
+        data: { user_id: userIdStatus },
         beforeSend: cookie,
         success: function(response) {
             if (response.status === 'success') {
@@ -79,6 +85,29 @@ function confirmToggleUserStatus() {
         },
         error: function() {
             alert('Error al cambiar el estado del usuario');
+        }
+    });
+}
+
+
+function confirmDelete() {
+    var userIdDelete = $('#modalConfirmDelete').data('userId');
+    $.ajax({
+        url: url_delete_user,
+        type: "POST",
+        dataType: "json",
+        data: { user_id: userIdDelete },
+        beforeSend: cookie,
+        success: function (response) {
+            if (response.status === 'success') {
+                $('#ModalEliminar').modal('hide');
+                $('#basic-datatable').DataTable().ajax.reload();
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+            alert('Error al eliminar el usuario');
         }
     });
 }

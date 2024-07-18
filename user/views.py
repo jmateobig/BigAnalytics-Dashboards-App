@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, CreateView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
@@ -8,7 +8,13 @@ from django.http import JsonResponse
 from django.db.models import Value, Q
 from django.db.models.functions import Concat
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import UserEditForm
+from django.urls import reverse_lazy
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from .forms import UserCreateForm, UserEditForm
+from django.conf import settings
+from django.utils.html import strip_tags
+from django.contrib.sites.shortcuts import get_current_site
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
@@ -17,8 +23,33 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'publicacion.add_user'
 
 
-class UserCreateView(LoginRequiredMixin, TemplateView):
+class UserCreateView(CreateView):
+    model = User
+    form_class = UserCreateForm
     template_name = 'user_create.html'
+    success_url = reverse_lazy('user:list')
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.set_unusable_password()
+        user.save()
+        form.save_m2m()  # Guardar los grupos asociados
+
+        # Obtener el dominio actual
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+
+
+        # Enviar correo de bienvenida
+        subject = 'Bienvenido a Nuestro Servicio'
+        html_message = render_to_string('email/welcome_email.html', {'user': user, 'domain': domain })
+        plain_message = strip_tags(html_message)
+        from_email = settings.EMAIL_HOST_USER
+        to_email = user.email
+
+        send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+
+        return super().form_valid(form)
 
 
 class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -105,6 +136,22 @@ class UserToggleStatusView(View):
             return JsonResponse({'status': 'success', 'is_active': user.is_active})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+
+class UserDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        user_id = request.POST.get('user_id')
+        try:
+            user = User.objects.get(pk=user_id)
+            print("hola")
+            user.groups.clear()
+            user.delete()
+            
+            return JsonResponse({'status': 'success', 'message': 'Usuario Eliminado'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

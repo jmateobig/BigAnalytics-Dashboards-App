@@ -1,0 +1,17 @@
+<!-- templates/welcome_email.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+</head>
+<body>
+    <h1>Hola {{ user.first_name }} {{ user.last_name }}</h1>
+    <p>Bienvenido a nuestro servicio. Nos alegra tenerte con nosotros.</p>
+    <p>Tu nombre de usuario es: {{ user.username }}</p>
+    <p>Puedes iniciar sesión y establecer tu contraseña usando el siguiente enlace:</p>
+    <p><a href="{{ domain }}/{% url 'account_reset_password' %}">Establecer Contraseña</a></p>
+</body>
+</html>

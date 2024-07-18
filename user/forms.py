@@ -32,6 +32,25 @@ class CustomSignupForm(SignupForm):
         self.helper.add_input(Submit('signup', 'Sign Up'))
 
 
+class UserCreateForm(forms.ModelForm):
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        required=False,
+        widget=CheckboxSelectMultiple,  # Usar el widget de checkboxes personalizado
+        label='Grupos'
+    )
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'username', 'last_name', 'email', 'groups']
+        labels = {
+            'first_name': 'Nombres',
+            'last_name': 'Apellidos',
+            'username': 'Usuario',
+            'email': 'Correo Electrónico',
+        }
+
+
 class UserEditForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
         queryset=Group.objects.all(),
