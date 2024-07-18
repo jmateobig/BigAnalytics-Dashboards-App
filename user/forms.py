@@ -42,7 +42,7 @@ class UserCreateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'username', 'last_name', 'email', 'groups']
+        fields = ['first_name', 'last_name', 'username', 'email', 'groups']
         labels = {
             'first_name': 'Nombres',
             'last_name': 'Apellidos',

@@ -23,7 +23,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    <button type="submit" class="btn btn-primary press-button">Crear Usuario</button>
                     <a href="{% url 'user:list' %}" class="btn btn-secondary">Cancelar</a>
                 </form>
             </div> <!-- end card-body -->

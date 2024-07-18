@@ -69,6 +69,7 @@ function verUsuario(userId) {
 
 function confirmToggleUserStatus() {
     var userIdStatus = $('#modalToggleConfirm').data('userId');
+    var buttonStatus = $('#modalToggleConfirm');
     $.ajax({
         url: url_toggle_status_user,
         type: "POST",
@@ -85,6 +86,10 @@ function confirmToggleUserStatus() {
         },
         error: function() {
             alert('Error al cambiar el estado del usuario');
+        },
+        complete: function() {
+            buttonStatus.html('Aceptar');
+            buttonStatus.prop('disabled', false);
         }
     });
 }
@@ -92,6 +97,7 @@ function confirmToggleUserStatus() {
 
 function confirmDelete() {
     var userIdDelete = $('#modalConfirmDelete').data('userId');
+    var buttonDelete = $('#modalConfirmDelete');
     $.ajax({
         url: url_delete_user,
         type: "POST",
@@ -108,6 +114,11 @@ function confirmDelete() {
         },
         error: function () {
             alert('Error al eliminar el usuario');
+        },
+        complete: function() {
+            buttonDelete.html('Aceptar');
+            buttonDelete.prop('disabled', false);
         }
+
     });
 }

@@ -1,20 +1,20 @@
-from django.shortcuts import redirect
-from django.views.generic import TemplateView, ListView, CreateView
-from django.views import View
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import TemplateView, ListView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import JsonResponse
-from django.db.models import Value, Q
+from django.db.models import Q, Value
 from django.db.models.functions import Concat
-from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from .forms import UserCreateForm, UserEditForm
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
+
+from .forms import UserCreateForm, UserEditForm
+
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
@@ -38,7 +38,6 @@ class UserCreateView(CreateView):
         # Obtener el dominio actual
         current_site = get_current_site(self.request)
         domain = current_site.domain
-
 
         # Enviar correo de bienvenida
         subject = 'Bienvenido a Nuestro Servicio'
@@ -74,7 +73,7 @@ class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             return redirect('user:list')  # Redirigir a la lista de usuarios después de guardar los cambios
         groups = Group.objects.all()
         return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
-    
+
 
 class UserListJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -107,7 +106,7 @@ class UserListJsonView(View):
         }
 
         return JsonResponse(data)
-    
+
 
 class UserDetailJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -124,7 +123,7 @@ class UserDetailJsonView(View):
             return JsonResponse({'status': 'success', 'data': data})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
-        
+
 
 class UserToggleStatusView(View):
     def post(self, request, *args, **kwargs):
@@ -143,7 +142,6 @@ class UserDeleteView(View):
         user_id = request.POST.get('user_id')
         try:
             user = User.objects.get(pk=user_id)
-            print("hola")
             user.groups.clear()
             user.delete()
             
