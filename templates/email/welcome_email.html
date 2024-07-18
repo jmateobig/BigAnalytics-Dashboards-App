@@ -12,6 +12,6 @@
     <p>Bienvenido a nuestro servicio. Nos alegra tenerte con nosotros.</p>
     <p>Tu nombre de usuario es: {{ user.username }}</p>
     <p>Puedes iniciar sesión y establecer tu contraseña usando el siguiente enlace:</p>
-    <p><a href="{{ domain }}/{% url 'account_reset_password' %}">Establecer Contraseña</a></p>
+    <p><a href="{{domain}}{% url 'account_reset_password' %}">Establecer Contraseña</a></p>
 </body>
 </html>

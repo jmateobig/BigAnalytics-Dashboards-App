@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
-
+from allauth.account.models import EmailAddress
 from .forms import UserCreateForm, UserEditForm
 
 
@@ -30,10 +30,15 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('user:list')
 
     def form_valid(self, form):
+        # Guardar el usuario sin contraseña utilizable
         user = form.save(commit=False)
         user.set_unusable_password()
+        user.is_active = True  # Activar automáticamente el usuario al crearlo
         user.save()
-        form.save_m2m()  # Guardar los grupos asociados
+
+        # Registrar la dirección de correo electrónico del usuario
+        email = form.cleaned_data['email']
+        EmailAddress.objects.get_or_create(user=user, email=email, verified=True, primary=True)
 
         # Obtener el dominio actual
         current_site = get_current_site(self.request)
@@ -54,6 +59,7 @@ class UserCreateView(CreateView):
 class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
     template_name = 'user_edit.html'
     permission_required = 'publicacion.add_user'
+    success_url = reverse_lazy('user:list')
 
     def get(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(User, pk=user_id)
@@ -70,7 +76,7 @@ class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             group_ids = request.POST.getlist('groups')
             user.groups.set(group_ids)
             user.save()
-            return redirect('user:list')  # Redirigir a la lista de usuarios después de guardar los cambios
+            return redirect(self.success_url)  # Redirigir a la lista de usuarios después de guardar los cambios
         groups = Group.objects.all()
         return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
 
