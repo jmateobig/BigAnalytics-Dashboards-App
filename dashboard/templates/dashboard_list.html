@@ -11,20 +11,21 @@
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col-md-8">
-                            <a href="{% url 'group:create' %}" title="Crear Usuario">
-                                <h2 class="mb-4">Grupos<i class="fe-plus me-1"></i></h2>
+                            <a href="{% url 'dashboard:create' %}" title="Crear Dashboard">
+                                <h2 class="mb-4">Dashboards<i class="fe-plus me-1"></i></h2>
                             </a>
                         </div>
                     </div>
                     <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Nombre</th>
                                 <th>Título</th>
                                 <th>Descripción</th>
                                 <th>URL</th>
                                 <th>Usuarios con Acceso</th>
+                                <th style="width: 100px !important;">Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -46,10 +47,34 @@
     var columnas = [
                 { data: 'id' },
                 { data: 'name' },
-                { data: 'title' },
-                { data: 'description' },
-                { data: 'url' },
-                { data: 'num_users' }
+                {
+                    data: 'title',
+                    render: function(data, type, row) {
+                        if (data.length > 15) {
+                            return '<span title="' + data + '">' + data.substr(0, 20) + '...</span>';
+                        } else {
+                            return '<span title="' + data + '">' + data + '</span>';
+                        }
+                    }
+                },
+                {
+                    data: 'description',
+                    render: function(data, type, row) {
+                        if (data.length > 15) {
+                            return '<span title="' + data + '">' + data.substr(0, 20) + '...</span>';
+                        } else {
+                            return '<span title="' + data + '">' + data + '</span>';
+                        }
+                    }
+                },
+                {
+                    data: 'url',
+                    render: function(data, type, row) {
+                        return '<a href="' + data + '" target="_blank">' + row.title + '</a>';
+                    }
+                },
+                { data: 'num_users' },
+                { data: 'id', render: function (data, type, row) { return renderOpciones(row); } }
             ];
 
     // DATATABLE

@@ -1,0 +1,37 @@
+{% extends "layouts/_layout_project.html" %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %} Project :: Crear Dashboard {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="card q-shadow-sm mt-3 col-md-5 col-sm-10 border-sm offset-md-3 offset-sm-1">
+
+            <div class="row flex-row flex-nowrap align-items-center p-0">
+                <!-- Title -->
+                <div class="col-8 text-start mt-3 mb-2 ps-4">
+                    <div>
+                        <h3 class="header-title mb-1" style="font-size: 3vh; color:#000 !important"><b>Crear Dashboard</b> </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary press-button">Crear Dashboard</button>
+                    <a href="{% url 'dashboard:list' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div> <!-- end card-body -->
+        </div> <!-- end card-->
+    </div>
+    <!-- end row-->
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}

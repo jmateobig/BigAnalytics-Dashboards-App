@@ -1,9 +1,15 @@
 from django.views.generic import  ListView, View, TemplateView
+from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import Permission
 from .models import Dashboard
 from django.db.models import Q
 from django.http import JsonResponse
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from .forms import DashboardCreateForm
+from .models import Dashboard
+from django.urls import reverse_lazy
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -14,7 +20,7 @@ class DashboardListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Dashboard
     template_name = 'dashboard_list.html'
     context_object_name = 'dashboards'
-    permission_required = 'publicacion.add_dashboard'
+    permission_required = 'dashboard.add_dashboard'
 
 
 class DashboardListJsonView(View):
@@ -66,3 +72,39 @@ class DashboardListJsonView(View):
         }
 
         return JsonResponse(response)
+    
+
+class DashboardCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Dashboard
+    form_class = DashboardCreateForm
+    template_name = 'dashboard_create.html'
+    success_url = reverse_lazy('dashboard:list')
+    permission_required = 'dashboard.add_dashboard'
+
+    def form_valid(self, form):
+        # Crear el Dashboard
+        dashboard = form.save(commit=False)
+        dashboard.save()
+
+        # Crear el ContentType
+        content_type = ContentType.objects.get(app_label='render', model='dashboard')
+
+        # Crear el permiso
+        permission_name = f'Can read {dashboard.name}'
+        permission_codename = dashboard.name.replace(' ', '_').lower()
+        permission = Permission.objects.create(
+            name=permission_name,
+            codename=permission_codename,
+            content_type=content_type
+        )
+
+        # Asignar el permiso al Dashboard
+        dashboard.permission = permission
+        dashboard.save()
+
+        # Asignar el permiso a los grupos seleccionados
+        groups = form.cleaned_data['groups']
+        for group in groups:
+            group.permissions.add(permission)
+
+        return super().form_valid(form)

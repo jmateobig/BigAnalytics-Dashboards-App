@@ -9,6 +9,7 @@ function renderOpciones(row) {
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Ver</button>
                 <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteDashboard(${row.id}, '${row.name}')">Eliminar</button>
+                <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Asignar Usuario</a>
             </div>
         </div>
     `;
