@@ -12,10 +12,10 @@ from .forms import GroupCreateForm, GroupEditForm
 
 
 class GroupListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
-    model = User
+    model = Group
     template_name = 'group_list.html'
     context_object_name = 'group'
-    permission_required = 'publicacion.view_group'
+    permission_required = 'publicacion.add_group'
 
 
 class GroupListJsonView(View):

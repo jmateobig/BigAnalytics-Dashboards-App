@@ -10,6 +10,7 @@ def create_initial_data(apps, schema_editor):
     
     # Crea el contenido para tu aplicación
     content_type = ContentType.objects.create(app_label='dashboard',model='dashboard')
+    content_type = ContentType.objects.create(app_label='render',model='dashboard')
 
     # Obtiene los grupos
     group_admin         = Group.objects.get(name='Admin')

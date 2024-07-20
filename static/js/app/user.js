@@ -5,7 +5,7 @@ function renderEstado(data) {
 }
 
 function renderOpciones(row) {
-    let accionTexto = row.is_active ? 'Inactivar' : 'Activar';
+    let accionTexto = row.is_active ? 'Desactivar' : 'Activar';
     return `
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -80,12 +80,13 @@ function confirmToggleUserStatus() {
             if (response.status === 'success') {
                 $('#ModalToggle').modal('hide');
                 $('#basic-datatable').DataTable().ajax.reload();
+                toastr.success(response.message);
             } else {
-                alert(response.message);
+                toastr.error(response.message);
             }
         },
         error: function() {
-            alert('Error al cambiar el estado del usuario');
+            toastr.error('Error al cambiar el estado del usuario');
         },
         complete: function() {
             buttonStatus.html('Aceptar');
@@ -108,12 +109,13 @@ function confirmDelete() {
             if (response.status === 'success') {
                 $('#ModalEliminar').modal('hide');
                 $('#basic-datatable').DataTable().ajax.reload();
+                toastr.success(response.message);
             } else {
-                alert(response.message);
+                toastr.error(response.message);
             }
         },
         error: function () {
-            alert('Error al eliminar el usuario');
+            toastr.error('Error al eliminar el usuario');
         },
         complete: function() {
             buttonDelete.html('Eliminar');

@@ -20,7 +20,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
     template_name = 'user_list.html'
     context_object_name = 'users'
-    permission_required = 'publicacion.view_user'
+    permission_required = 'publicacion.add_user'
 
 class UserListJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -138,7 +138,8 @@ class UserToggleStatusView(View):
             user = User.objects.get(pk=user_id)
             user.is_active = not user.is_active
             user.save()
-            return JsonResponse({'status': 'success', 'is_active': user.is_active})
+            message = 'Usuario activado' if user.is_active else 'Usuario desactivado'
+            return JsonResponse({'status': 'success', 'is_active': user.is_active, 'message': message})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
 

@@ -6,35 +6,35 @@ function renderOpciones(row) {
                 <b>Acción</b> <i class="mdi mdi-chevron-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verGrupo(${row.id})">Ver</button>
-                <a class="dropdown-item" href="/group/edit/${row.id}/">Editar</a>
-                <button type="button" class="dropdown-item" onclick="confirmDeleteGroup(${row.id}, '${row.name}')">Eliminar</button>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Ver</button>
+                <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Editar</a>
+                <button type="button" class="dropdown-item" onclick="confirmDeleteDashboard(${row.id}, '${row.name}')">Eliminar</button>
             </div>
         </div>
     `;
 }
 
 // MODALES
-function confirmDeleteGroup(groupId, groupName) {
-    $('#modalEliminarNombre').text(groupName);
-    $('#modalConfirmDelete').data('groupId', groupId);
+function confirmDeleteDashboard(dashboardId, dashboardName) {
+    $('#modalEliminarNombre').text(dashboardName);
+    $('#modalConfirmDelete').data('dashboardId', dashboardId);
     $('#ModalEliminar').modal('show');
 }
 
 //AJAX
-function verGrupo(groupId) {
+function verDashboard(dashboardId) {
     $.ajax({
-        url: url_get_group, // Asegúrate de definir esta URL en tu JavaScript
+        url: url_get_dashboard, // Asegúrate de definir esta URL en tu JavaScript
         type: "POST",
         dataType: "json",
-        data: { group_id: groupId },
+        data: { dashboard_id: dashboardId },
         beforeSend: cookie,
         success: function(response) {
             if (response.status === 'success') {
-                const group = response.data;
-                $('#modalNombre').text(group.name);
+                const dashboard = response.data;
+                $('#modalNombre').text(dashboard.name);
                 let usuariosHTML = '';
-                group.users.forEach(user => {
+                dashboard.users.forEach(user => {
                     usuariosHTML += `
                         <div class="inbox-item">
                             <p class="inbox-item-author">
@@ -51,20 +51,20 @@ function verGrupo(groupId) {
             }
         },
         error: function() {
-            alert('Error al obtener los detalles del grupo');
+            alert('Error al obtener los detalles del dashboard');
         }
     });
 }
 
 
 function confirmDelete() {
-    var groupIdDelete = $('#modalConfirmDelete').data('groupId');
+    var dashboardIdDelete = $('#modalConfirmDelete').data('dashboardId');
     var buttonDelete = $('#modalConfirmDelete');
     $.ajax({
-        url: url_delete_group,
+        url: url_delete_dashboard,
         type: "POST",
         dataType: "json",
-        data: { group_id: groupIdDelete },
+        data: { dashboard_id: dashboardIdDelete },
         beforeSend: cookie,
         success: function (response) {
             if (response.status === 'success') {
@@ -76,7 +76,7 @@ function confirmDelete() {
             }
         },
         error: function () {
-            toastr.error('Error al eliminar el grupo');
+            toastr.error('Error al eliminar el dashboard');
         },
         complete: function() {
             buttonDelete.html('Eliminar');

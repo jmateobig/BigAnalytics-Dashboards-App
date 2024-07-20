@@ -19,10 +19,12 @@
                     <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Grupo</th>
-                                <th>No Usuarios</th>
-                                <th style="width: 100px !important;">Acciones</th>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>URL</th>
+                                <th>Usuarios con Acceso</th>
                             </tr>
                         </thead>
                     </table>
@@ -32,27 +34,27 @@
     </div>
 </div>
 
-{% include "modals/info_group.html" %}
-{% include "modals/delete_user.html" %}
+{% comment %} {% include "modals/info_group.html" %}
+{% include "modals/delete_user.html" %} {% endcomment %}
 {% endblock content %}
 
 {% block extra_javascript %}
-<script src="{% static 'js/app/group.js' %}"></script>
+<script src="{% static 'js/app/dashboard.js' %}"></script>
 <script>
-    var url_get_groups =  "{% url 'group:get_groups' %}";
-    var url_get_group =   "{% url 'group:get_group' %}";
-    var url_delete_group = "{% url 'group:delete_group' %}";
+    var url_get_dashboard =  "{% url 'dashboard:get_dashboards' %}";
     
     var columnas = [
-            { data: 'id' },
-            { data: 'name' },
-            { data: 'num_users' },
-            { data: 'id', render: function (data, type, row) { return renderOpciones(row); } }
-        ];
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'title' },
+                { data: 'description' },
+                { data: 'url' },
+                { data: 'num_users' }
+            ];
 
     // DATATABLE
     document.addEventListener('DOMContentLoaded', function () {
-        loadTableData(url_get_groups, columnas);
+        loadTableData(url_get_dashboard, columnas);
     });
 </script>
 {% endblock extra_javascript %}
