@@ -1,7 +1,7 @@
 {% extends "layouts/_layout_project.html" %}
 {% load static i18n %}
 
-{% block title %} Project :: Usuarios{% endblock title %}
+{% block title %} Project :: Groups{% endblock title %}
 
 {% block content %}
 <div class="container-fluid">
@@ -11,8 +11,8 @@
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col-md-8">
-                            <a href="{% url 'user:create' %}" title="Crear Usuario">
-                                <h2 class="mb-4">Usuarios <i class="fe-plus me-1"></i></h2>
+                            <a href="{% url 'group:create' %}" title="Crear Usuario">
+                                <h2 class="mb-4">Grupos<i class="fe-plus me-1"></i></h2>
                             </a>
                         </div>
                     </div>
@@ -20,10 +20,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nombre</th>
-                                <th>Usuario</th>
-                                <th>Correo</th>
-                                <th>Estado</th>
+                                <th>Grupo</th>
+                                <th>No Usuarios</th>
                                 <th style="width: 100px !important;">Acciones</th>
                             </tr>
                         </thead>
@@ -34,19 +32,37 @@
     </div>
 </div>
 
-{% include "modals/info_user.html" %}
-{% include "modals/toggle_status_user.html" %}
+{% include "modals/info_group.html" %}
 {% include "modals/delete_user.html" %}
 {% endblock content %}
 
 {% block extra_javascript %}
-<script src="{% static 'js/app/user.js' %}"></script>
+<script src="{% static 'js/app/group.js' %}"></script>
+<script>
+    var url_get_groups =  "{% url 'group:get_groups' %}";
+    var url_get_group =   "{% url 'group:get_group' %}";
+    var url_delete_group = "{% url 'group:delete_group' %}";
+    
+    var columnas = [
+            { data: 'id' },
+            { data: 'name' },
+            { data: 'num_users' },
+            { data: 'id', render: function (data, type, row) { return renderOpciones(row); } }
+        ];
+
+    // DATATABLE
+    document.addEventListener('DOMContentLoaded', function () {
+        loadTableData(url_get_groups, columnas);
+    });
+</script>
+
+{% comment %} <script src="{% static 'js/app/user.js' %}"></script>
 
 <script> //GENERAL
-    var url_get_users =          "{% url 'user:get_users' %}";
-    var url_get_user =           "{% url 'user:get_user' %}";
+    var url_get_users = "{% url 'user:get_users' %}";
+    var url_get_user = "{% url 'user:get_user' %}";
     var url_toggle_status_user = "{% url 'user:toggle_status_user' %}";
-    var url_delete_user =        "{% url 'user:delete_user' %}";
+    var url_delete_user = "{% url 'user:delete_user' %}";
 
     var columnas = [
             { data: 'id' },
@@ -61,6 +77,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         loadTableData(url_get_users, columnas);
     });
-</script>
+</script> {% endcomment %}
 
 {% endblock extra_javascript %}

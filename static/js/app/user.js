@@ -116,7 +116,7 @@ function confirmDelete() {
             alert('Error al eliminar el usuario');
         },
         complete: function() {
-            buttonDelete.html('Aceptar');
+            buttonDelete.html('Eliminar');
             buttonDelete.prop('disabled', false);
         }
 

@@ -4,13 +4,12 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.contrib.auth.models import User, Group
-
-class CheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-    def render(self, name, value, attrs=None, renderer=None):
-        if attrs is None:
-            attrs = {}
-        attrs['class'] = 'form-check-input'  # Agregar clase de Bootstrap para los checkboxes
-        return super().render(name, value, attrs, renderer)
+from django_select2 import forms as s2forms
+    
+class CustomSelect2Multiple(s2forms.Select2MultipleWidget):
+    def __init__(self, *args, **kwargs):
+        kwargs['attrs'] = {'class': 'custom-select2'}  # Puedes personalizar las clases de estilo aquí
+        super().__init__(*args, **kwargs)
 
 class CustomLoginForm(LoginForm):
     captcha = CaptchaField()
@@ -36,7 +35,7 @@ class UserCreateForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
         queryset=Group.objects.all(),
         required=False,
-        widget=CheckboxSelectMultiple,  # Usar el widget de checkboxes personalizado
+        widget=CustomSelect2Multiple,  # Usar el widget de checkboxes personalizado
         label='Grupos'
     )
 
@@ -55,7 +54,7 @@ class UserEditForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
         queryset=Group.objects.all(),
         required=False,
-        widget=CheckboxSelectMultiple,  # Usar el widget de checkboxes personalizado
+        widget=CustomSelect2Multiple,  # Usar el widget de checkboxes personalizado
         label='Grupos'
     )
 
@@ -67,3 +66,36 @@ class UserEditForm(forms.ModelForm):
             'last_name': 'Apellidos',
             'email': 'Correo Electrónico',
         }
+
+
+class GroupCreateForm(forms.ModelForm):
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        required=False,
+        widget=CustomSelect2Multiple,
+        label='Usuarios'
+    )
+
+    class Meta:
+        model = Group
+        fields = ['name', 'users']
+        labels = {
+            'name': 'Nombre del Grupo',
+        }
+
+
+class GroupEditForm(forms.ModelForm):
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        required=False,
+        widget=CustomSelect2Multiple,  # Usar el widget de checkboxes
+        label='Usuarios'
+    )
+
+    class Meta:
+        model = Group
+        fields = ['name', 'users']
+        labels = {
+            'name': 'Nombre del Grupo',
+        }
+

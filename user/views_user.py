@@ -20,66 +20,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
     template_name = 'user_list.html'
     context_object_name = 'users'
-    permission_required = 'publicacion.add_user'
-
-
-class UserCreateView(CreateView):
-    model = User
-    form_class = UserCreateForm
-    template_name = 'user_create.html'
-    success_url = reverse_lazy('user:list')
-
-    def form_valid(self, form):
-        # Guardar el usuario sin contraseña utilizable
-        user = form.save(commit=False)
-        user.set_unusable_password()
-        user.is_active = True  # Activar automáticamente el usuario al crearlo
-        user.save()
-
-        # Registrar la dirección de correo electrónico del usuario
-        email = form.cleaned_data['email']
-        EmailAddress.objects.get_or_create(user=user, email=email, verified=True, primary=True)
-
-        # Obtener el dominio actual
-        current_site = get_current_site(self.request)
-        domain = current_site.domain
-
-        # Enviar correo de bienvenida
-        subject = 'Bienvenido a Nuestro Servicio'
-        html_message = render_to_string('email/welcome_email.html', {'user': user, 'domain': domain })
-        plain_message = strip_tags(html_message)
-        from_email = settings.EMAIL_HOST_USER
-        to_email = user.email
-
-        send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
-
-        return super().form_valid(form)
-
-
-class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    template_name = 'user_edit.html'
-    permission_required = 'publicacion.add_user'
-    success_url = reverse_lazy('user:list')
-
-    def get(self, request, user_id, *args, **kwargs):
-        user = get_object_or_404(User, pk=user_id)
-        form = UserEditForm(instance=user)
-        groups = Group.objects.all()
-        return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
-
-    def post(self, request, user_id, *args, **kwargs):
-        user = get_object_or_404(User, pk=user_id)
-        form = UserEditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            # Update user groups
-            group_ids = request.POST.getlist('groups')
-            user.groups.set(group_ids)
-            user.save()
-            return redirect(self.success_url)  # Redirigir a la lista de usuarios después de guardar los cambios
-        groups = Group.objects.all()
-        return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
-
+    permission_required = 'publicacion.view_user'
 
 class UserListJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -112,7 +53,7 @@ class UserListJsonView(View):
         }
 
         return JsonResponse(data)
-
+    
 
 class UserDetailJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -129,6 +70,65 @@ class UserDetailJsonView(View):
             return JsonResponse({'status': 'success', 'data': data})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+
+class UserCreateView(CreateView):
+    model = User
+    form_class = UserCreateForm
+    template_name = 'user_create.html'
+    success_url = reverse_lazy('user:list')
+
+    def form_valid(self, form):
+        # Guardar el usuario sin contraseña utilizable
+        user = form.save(commit=False)
+        user.set_unusable_password()
+        user.is_active = True  # Activar automáticamente el usuario al crearlo
+        user.save()
+
+        # Registrar la dirección de correo electrónico del usuario
+        email = form.cleaned_data['email']
+        EmailAddress.objects.get_or_create(user=user, email=email, verified=True, primary=True)
+
+        # Obtener el dominio actual
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+
+        # Enviar correo de bienvenida
+        subject = 'Bienvenido a Nuestro Servicio'
+        html_message = render_to_string('email/welcome_email.html', {'user': user, 'domain': domain })
+        plain_message = strip_tags(html_message)
+        from_email = settings.EMAIL_HOST_USER
+        to_email = user.email
+
+        send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+        messages.success(self.request, 'Usuario creado exitosamente y correo de bienvenida enviado.')
+        return super().form_valid(form)
+
+
+class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    template_name = 'user_edit.html'
+    permission_required = 'publicacion.add_user'
+    success_url = reverse_lazy('user:list')
+
+    def get(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, pk=user_id)
+        form = UserEditForm(instance=user)
+        groups = Group.objects.all()
+        return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
+
+    def post(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, pk=user_id)
+        form = UserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            # Update user groups
+            group_ids = request.POST.getlist('groups')
+            user.groups.set(group_ids)
+            user.save()
+            messages.success(request, 'Usuario actualizado con éxito!')
+            return redirect(self.success_url)  # Redirigir a la lista de usuarios después de guardar los cambios
+        groups = Group.objects.all()
+        return render(request, self.template_name, {'form': form, 'user': user, 'groups': groups})
 
 
 class UserToggleStatusView(View):

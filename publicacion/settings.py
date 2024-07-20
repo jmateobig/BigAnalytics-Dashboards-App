@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "django.contrib.humanize",
     'pwa',
+    'django_select2',
     
     'user',
     'dashboard',
@@ -185,8 +186,8 @@ ACCOUNT_FORMS = {
 }
 
 
-PWA_APP_NAME = 'Tu App'
-PWA_APP_DESCRIPTION = "Descripción de tu App"
+PWA_APP_NAME = 'Publicacion [BigAnalytics]'
+PWA_APP_DESCRIPTION = "Aplicación de publicación de Dashboards BigAnalytics"
 PWA_APP_THEME_COLOR = '#3499f'
 PWA_APP_BACKGROUND_COLOR = '#3499f'
 PWA_APP_DISPLAY = 'standalone'

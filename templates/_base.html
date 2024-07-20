@@ -69,6 +69,7 @@
         <!--Notificaciones-->
         <script src="{% static 'js/personalized/get_notification.js' %}"></script>
         <script src="{% static 'js/personalized/press_button.js' %}"></script>
+        <script src="{% static 'js/personalized/custom_checkbox.js' %}"></script>
         
         <!-- third party js -->
         <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
@@ -87,6 +88,16 @@
         <script src="{% static 'js/personalized/get_cookie.js' %}"></script>
         <script src="{% static 'js/personalized/get_datatables.js' %}"></script>
         <script>$('[data-toggle="select2"]').select2();</script>
+        <script>
+            // Inicializar select2 en todos los elementos con la clase 'custom-select2'
+            $(document).ready(function() {
+                $('.custom-select2').select2({
+                    width: '100%',
+                    placeholder: 'Selecciona una opción',
+                    allowClear: true
+                });
+            });
+        </script>
 
         
         {% endblock javascript %}

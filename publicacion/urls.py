@@ -26,7 +26,8 @@ urlpatterns = [
     path('', include('pwa.urls')),
     path('', IndexView.as_view(), name='index'),
 
-    path('user/',include('user.urls')),
+    path('user/',include('user.urls_user')),
+    path('group/',include('user.urls_group')),
     path('notification/',include('notification.urls')),
 ]
 
