@@ -11,7 +11,7 @@ from .forms import DashboardCreateForm, DashboardEditForm
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-
+from django.core.exceptions import PermissionDenied
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
@@ -79,8 +79,8 @@ class DashboardCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateVie
     model = Dashboard
     form_class = DashboardCreateForm
     template_name = 'dashboard_create.html'
-    success_url = reverse_lazy('dashboard:list')
     permission_required = 'dashboard.add_dashboard'
+    success_url = reverse_lazy('dashboard:list')
 
     def form_valid(self, form):
         # Crear el Dashboard
@@ -221,3 +221,32 @@ class DashboardDeleteView(View):
             return JsonResponse({'status': 'error', 'message': 'Dashboard no encontrado'}, status=404)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
+
+class DashboardRenderView(LoginRequiredMixin, TemplateView):
+    template_name = 'dashboard_render.html'
+
+    def has_permission(self, permission, user):
+        admin_group = Group.objects.filter(name='Admin').first()
+        if admin_group and admin_group in user.groups.all():
+            return True
+        direct_permission_codenames = set(user.user_permissions.values_list('codename', flat=True))
+        group_permission_codenames = set(Permission.objects.filter(group__user=user).values_list('codename', flat=True))
+        combined_codenames = direct_permission_codenames.union(group_permission_codenames)
+        return permission.codename in combined_codenames
+    
+
+    def get(self, request, *args, **kwargs):
+        dashboard_id = self.kwargs.get('dashboard_id')
+        dashboard = get_object_or_404(Dashboard, id=dashboard_id)
+
+        # Obtener el permiso asociado al dashboard
+        permission = dashboard.permission
+
+        if not self.has_permission(permission, request.user):
+            raise PermissionDenied
+        
+        context = {
+            'dashboard': dashboard
+        }
+        return self.render_to_response(context)

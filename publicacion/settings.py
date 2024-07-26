@@ -91,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 # 'django.contrib.auth.context_processors.PermWrapper',
                 'django.contrib.messages.context_processors.messages',
+                'dashboard.context_processors.dashboards_context',
             ],
         },
     },

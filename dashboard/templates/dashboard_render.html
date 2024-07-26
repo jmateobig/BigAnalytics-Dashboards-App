@@ -1,0 +1,17 @@
+{% extends "layouts/_layout_project.html" %}
+{% load static i18n %}
+
+{% block title %} Project :: Dashboard{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h1>{{ dashboard.title }}</h1>
+    <p>{{ dashboard.description }}</p>
+    <p>URL: <a href="{{ dashboard.url }}" target="_blank">{{ dashboard.url }}</a></p>
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+
+{% endblock%}

@@ -6,9 +6,10 @@ function renderOpciones(row) {
                 <b>Acción</b> <i class="mdi mdi-chevron-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Ver</button>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Información</button>
                 <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteDashboard(${row.id}, '${row.name}')">Eliminar</button>
+                <a class="dropdown-item" href="/dashboard/render/${row.id}/">Ver</a>
             </div>
         </div>
     `;

@@ -53,7 +53,7 @@ class GroupListJsonView(View):
         return JsonResponse(data)
     
 
-class GroupCreateView(CreateView):
+class GroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Group
     form_class = GroupCreateForm
     template_name = 'group_create.html'

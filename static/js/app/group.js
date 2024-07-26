@@ -6,7 +6,7 @@ function renderOpciones(row) {
                 <b>Acción</b> <i class="mdi mdi-chevron-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verGrupo(${row.id})">Ver</button>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verGrupo(${row.id})">Información</button>
                 <a class="dropdown-item" href="/group/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteGroup(${row.id}, '${row.name}')">Eliminar</button>
             </div>

@@ -58,10 +58,11 @@ class UserListJsonView(View):
         return JsonResponse(data)
     
 
-class UserCreateView(CreateView):
+class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = User
     form_class = UserCreateForm
     template_name = 'user_create.html'
+    permission_required = 'publicacion.add_user'
     success_url = reverse_lazy('user:list')
 
     def form_valid(self, form):
@@ -127,7 +128,7 @@ class UserDetailJsonView(View):
 
 class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
     template_name = 'user_edit.html'
-    permission_required = 'publicacion.add_user'
+    permission_required = 'publicacion.change_user'
     success_url = reverse_lazy('user:list')
 
     def get(self, request, user_id, *args, **kwargs):

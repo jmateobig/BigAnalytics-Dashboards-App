@@ -12,7 +12,7 @@ function renderOpciones(row) {
                 <b>Acción</b> <i class="mdi mdi-chevron-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verUsuario(${row.id})">Ver</button>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verUsuario(${row.id})">Información</button>
                 <a class="dropdown-item" href="/user/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="toggleUserStatus(${row.id}, '${row.full_name}', ${row.is_active})">${accionTexto}</button>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteUser(${row.id}, '${row.full_name}')">Eliminar</button>

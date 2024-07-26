@@ -22,17 +22,52 @@
             <!--- Sidemenu -->
             <div class="sidebar-main-menu sidebar2-color">
                 <div id="two-col-menu" class="h-100">
+
+                    
                     <div class="twocolumn-menu-item d-block" id="dashboard">
                         <div class="title-box">
-                            <h5 class="menu-title">Inicio</h5>
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'index' %}" >Tablero</a>
-                                </li>
+                            <h5 class="menu-title">Tableros</h5>
+                            <ul class="nav flex-column"> 
+                                {% if direct_dashboards %}
+                                    <li class="nav-item">
+                                        <a href="#Asignaciones" data-bs-toggle="collapse" class="nav-link">
+                                            <span> Asignaciones </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="Asignaciones">
+                                            <ul class="nav-second-level">
+                                                {% for dashboard in direct_dashboards %}
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </li>
+                                {% endif %}
                             </ul>
+
+                            {% for group, dashboards in group_dashboards_by_group.items %}
+                                <ul class="nav flex-column"> 
+                                    <li class="nav-item">
+                                        <a href="#group-{{ group.id }}" data-bs-toggle="collapse" class="nav-link">
+                                            <span> {{ group.name }} </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="group-{{ group.id }}">
+                                            <ul class="nav-second-level">
+                                                {% for dashboard in dashboards %}
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            {% endfor %}
                         </div>
                     </div>
-
                     <div class="twocolumn-menu-item" id="settings">
                         <h5 class="menu-title">Configuraciones</h5>
                         <ul class="nav flex-column">
