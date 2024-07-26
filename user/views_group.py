@@ -53,6 +53,21 @@ class GroupListJsonView(View):
         return JsonResponse(data)
     
 
+class GroupCreateView(CreateView):
+    model = Group
+    form_class = GroupCreateForm
+    template_name = 'group_create.html'
+    permission_required = 'publicacion.add_group'
+    success_url = reverse_lazy('group:list')  
+
+    def form_valid(self, form):
+        group = form.save()
+        users = form.cleaned_data['users']
+        group.user_set.set(users)
+        messages.success(self.request, 'Grupo creado exitosamente y correo de bienvenida enviado.')
+        return super().form_valid(form)
+
+
 class GroupDetailJsonView(View):
     def post(self, request, *args, **kwargs):
         group_id = request.POST.get('group_id')
@@ -69,23 +84,9 @@ class GroupDetailJsonView(View):
             return JsonResponse({'status': 'error', 'message': 'Group not found'}, status=404)
         
 
-class GroupCreateView(CreateView):
-    model = Group
-    form_class = GroupCreateForm
-    template_name = 'group_create.html'
-    success_url = reverse_lazy('group:list')  
-
-    def form_valid(self, form):
-        group = form.save()
-        users = form.cleaned_data['users']
-        group.user_set.set(users)
-        messages.success(self.request, 'Grupo creado exitosamente y correo de bienvenida enviado.')
-        return super().form_valid(form)
-    
-
 class GroupEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
     template_name = 'group_edit.html'
-    permission_required = 'auth.change_group'
+    permission_required = 'publicacion.change_group'
     success_url = reverse_lazy('group:list')
 
     def get(self, request, group_id, *args, **kwargs):

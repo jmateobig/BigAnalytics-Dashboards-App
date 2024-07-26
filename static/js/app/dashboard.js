@@ -9,7 +9,6 @@ function renderOpciones(row) {
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Ver</button>
                 <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteDashboard(${row.id}, '${row.name}')">Eliminar</button>
-                <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Asignar Usuario</a>
             </div>
         </div>
     `;
@@ -23,9 +22,10 @@ function confirmDeleteDashboard(dashboardId, dashboardName) {
 }
 
 //AJAX
+// Función para mostrar detalles del dashboard en el modal
 function verDashboard(dashboardId) {
     $.ajax({
-        url: url_get_dashboard, // Asegúrate de definir esta URL en tu JavaScript
+        url: url_get_dashboard,
         type: "POST",
         dataType: "json",
         data: { dashboard_id: dashboardId },
@@ -33,20 +33,39 @@ function verDashboard(dashboardId) {
         success: function(response) {
             if (response.status === 'success') {
                 const dashboard = response.data;
-                $('#modalNombre').text(dashboard.name);
+                $('#modalNombre').val(dashboard.name);
+                $('#modalTitulo').val(dashboard.title);
+                $('#modalDescripcion').val(dashboard.description);
+                $('#modalUrl').val(dashboard.url);
+
+                // Grupos
+                let gruposHTML = '';
+                dashboard.groups.forEach(group => {
+                    gruposHTML += `<li class="text-reset mb-2 d-block"><i class="mdi mdi-checkbox-blank-circle-outline me-1 text-primary"></i><span class="mb-0 mt-1">${group}</span></li>`;
+                });
+                $('#modalGrupos').html(gruposHTML);
+
+                // Usuarios
                 let usuariosHTML = '';
                 dashboard.users.forEach(user => {
-                    usuariosHTML += `
-                        <div class="inbox-item">
-                            <p class="inbox-item-author">
-                                ${user.is_active ? '<i class="mdi mdi-checkbox-blank-circle-outline me-1 text-success"></i>' : '<i class="mdi mdi-checkbox-blank-circle-outline me-1 text-danger"></i>'}
-                                ${user.username}
-                            </p>
-                            <p class="inbox-item-text">${user.full_name}</p>
-                        </div>
-                    `;
+                    const userClass = user.flag === 'success' ? 'text-success' : 'text-warning';
+                    usuariosHTML += `<li class="text-reset mb-2 d-block usuario-item ${userClass}"><i class="mdi mdi-checkbox-blank-circle-outline me-1 ${userClass}"></i><span class="mb-0 mt-1">${user.full_name}</span></li>`;
                 });
                 $('#modalUsuarios').html(usuariosHTML);
+
+                // Agregar event listener para la búsqueda
+                $('#searchUsuarios').on('input', function() {
+                    const searchText = $(this).val().toLowerCase();
+                    $('#modalUsuarios .usuario-item').each(function() {
+                        const userText = $(this).text().toLowerCase();
+                        if (userText.includes(searchText)) {
+                            $(this).removeClass('hide-item').addClass('show-item');
+                        } else {
+                            $(this).removeClass('show-item').addClass('hide-item');
+                        }
+                    });
+                });
+
             } else {
                 alert(response.message);
             }
@@ -56,6 +75,8 @@ function verDashboard(dashboardId) {
         }
     });
 }
+
+
 
 
 function confirmDelete() {

@@ -13,7 +13,10 @@ from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
 from allauth.account.models import EmailAddress
+
+from dashboard.models import Dashboard
 from .forms import UserCreateForm, UserEditForm
+from django.contrib.auth.models import Permission
 
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -55,23 +58,6 @@ class UserListJsonView(View):
         return JsonResponse(data)
     
 
-class UserDetailJsonView(View):
-    def post(self, request, *args, **kwargs):
-        user_id = request.POST.get('user_id')
-        try:
-            user = User.objects.get(pk=user_id)
-            data = {
-                'id': user.id,
-                'full_name': f"{user.first_name} {user.last_name}",
-                'email': user.email,
-                'is_active': user.is_active,
-                'groups': list(user.groups.values_list('name', flat=True)),
-            }
-            return JsonResponse({'status': 'success', 'data': data})
-        except User.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
-
-
 class UserCreateView(CreateView):
     model = User
     form_class = UserCreateForm
@@ -103,6 +89,40 @@ class UserCreateView(CreateView):
         send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
         messages.success(self.request, 'Usuario creado exitosamente y correo de bienvenida enviado.')
         return super().form_valid(form)
+
+
+class UserDetailJsonView(View):
+    def post(self, request, *args, **kwargs):
+        user_id = request.POST.get('user_id')
+        try:
+            user = User.objects.get(pk=user_id)
+            
+            # Obtener dashboards a los que el usuario tiene acceso directo
+            direct_permissions = Permission.objects.filter(user=user)
+            direct_dashboards = Dashboard.objects.filter(permission__in=direct_permissions)
+
+            # Obtener grupos a los que el usuario pertenece
+            user_groups = user.groups.all()
+            group_permissions = Permission.objects.filter(group__in=user_groups)
+            group_dashboards = Dashboard.objects.filter(permission__in=group_permissions).exclude(id__in=direct_dashboards)
+
+            # Crear una lista de dashboards asegurando que no se repitan
+            dashboards = list(direct_dashboards) + list(group_dashboards)
+
+            # Formatear los datos para la respuesta
+            data = {
+                'id': user.id,
+                'full_name': f"{user.first_name} {user.last_name}",
+                'email': user.email,
+                'is_active': user.is_active,
+                'groups': list(user.groups.values_list('name', flat=True)),
+                'direct_dashboards': list(direct_dashboards.values_list('name', 'id')),
+                'group_dashboards': list(group_dashboards.values_list('name', 'id')),
+            }
+
+            return JsonResponse({'status': 'success', 'data': data})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
 
 
 class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):

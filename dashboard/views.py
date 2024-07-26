@@ -5,10 +5,11 @@ from django.contrib.auth.models import Permission
 from .models import Dashboard
 from django.db.models import Q
 from django.http import JsonResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
-from .forms import DashboardCreateForm
-from .models import Dashboard
+from .forms import DashboardCreateForm, DashboardEditForm
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
 
@@ -86,7 +87,7 @@ class DashboardCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateVie
         dashboard = form.save(commit=False)
         dashboard.save()
 
-        # Crear el ContentType
+        # Obtener el ContentType
         content_type = ContentType.objects.get(app_label='render', model='dashboard')
 
         # Crear el permiso
@@ -107,4 +108,116 @@ class DashboardCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateVie
         for group in groups:
             group.permissions.add(permission)
 
+        # Asignar el permiso a los usuarios seleccionados
+        users = form.cleaned_data['users']
+        for user in users:
+            user.user_permissions.add(permission)
+
         return super().form_valid(form)
+    
+
+class DashboardDetailJsonView(View):
+    def post(self, request, *args, **kwargs):
+        dashboard_id = request.POST.get('dashboard_id')
+        try:
+            dashboard = Dashboard.objects.get(pk=dashboard_id)
+
+            # Obtener grupos y usuarios con el permiso
+            groups_with_permission = Group.objects.filter(permissions=dashboard.permission)
+            users_with_permission = User.objects.filter(user_permissions=dashboard.permission).distinct()
+            
+            # Obtener usuarios indirectos a través de grupos
+            indirect_users = User.objects.filter(groups__in=groups_with_permission).distinct()
+            
+            # Crear un diccionario para almacenar usuarios con sus banderas
+            users_data = {}
+
+            for user in indirect_users:
+                if user.username not in users_data:
+                    users_data[user.username] = {
+                        'full_name': f"{user.get_full_name()} ({user.username})",
+                        'flag': 'warning'
+                    }
+
+            for user in users_with_permission:
+                users_data[user.username] = {
+                    'full_name': f"{user.get_full_name()} ({user.username})",
+                    'flag': 'success'
+                }
+            
+            # Convertir el diccionario en una lista y ordenar
+            users_list = [{'full_name': user_data['full_name'], 'flag': user_data['flag']} 
+                          for username, user_data in users_data.items()]
+            users_list.sort(key=lambda x: (x['flag'] == 'warning', x['full_name']))
+
+            data = {
+                'id': dashboard.id,
+                'name': dashboard.name,
+                'title': dashboard.title,
+                'description': dashboard.description,
+                'url': dashboard.url,
+                'groups': list(groups_with_permission.values_list('name', flat=True)),
+                'users': users_list,
+            }
+
+            return JsonResponse({'status': 'success', 'data': data})
+        except Dashboard.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Dashboard not found'}, status=404)
+        
+
+class DashboardEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    template_name = 'dashboard_edit.html'
+    permission_required = 'dashboard.change_dashboard'
+    success_url = reverse_lazy('dashboard:list')
+
+    def get(self, request, dashboard_id, *args, **kwargs):
+        dashboard = get_object_or_404(Dashboard, pk=dashboard_id)
+        form = DashboardEditForm(instance=dashboard)
+        form.fields['groups'].initial = Group.objects.filter(permissions=dashboard.permission)
+        form.fields['users'].initial = User.objects.filter(user_permissions=dashboard.permission)
+        return render(request, self.template_name, {'form': form, 'dashboard': dashboard})
+
+    def post(self, request, dashboard_id, *args, **kwargs):
+        dashboard = get_object_or_404(Dashboard, pk=dashboard_id)
+        form = DashboardEditForm(request.POST, instance=dashboard)
+        if form.is_valid():
+            form.save()
+            # Update groups and users with the permission
+            groups = form.cleaned_data['groups']
+            users = form.cleaned_data['users']
+            dashboard.permission.group_set.set(groups)
+            dashboard.permission.user_set.set(users)
+            messages.success(request, '¡Dashboard actualizado con éxito!')
+            return redirect(self.success_url)
+        return render(request, self.template_name, {'form': form, 'dashboard': dashboard})
+    
+
+class DashboardDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        dashboard_id = request.POST.get('dashboard_id')
+        try:
+            dashboard = get_object_or_404(Dashboard, pk=dashboard_id)
+            permission = dashboard.permission
+
+            # Eliminar asignaciones de permiso a grupos
+            groups_with_permission = Group.objects.filter(permissions=permission)
+            for group in groups_with_permission:
+                group.permissions.remove(permission)
+
+            # Eliminar asignaciones de permiso a usuarios
+            users_with_permission = User.objects.filter(user_permissions=permission)
+            for user in users_with_permission:
+                user.user_permissions.remove(permission)
+
+            # Eliminar el dashboard
+            dashboard.delete()
+
+            # Eliminar el permiso
+            if permission:
+                permission.delete()
+
+            return JsonResponse({'status': 'success', 'message': 'Dashboard eliminado con éxito'})
+        except Dashboard.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Dashboard no encontrado'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

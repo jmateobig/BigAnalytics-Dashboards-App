@@ -170,3 +170,11 @@
     color: #6c757d !important;
     text-align: left !important;
 }
+
+.show-item {
+    display: block !important;
+}
+
+.hide-item {
+    display: none !important;
+}

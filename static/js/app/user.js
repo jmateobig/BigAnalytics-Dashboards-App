@@ -51,11 +51,36 @@ function verUsuario(userId) {
                 $('#modalNombre').val(user.full_name);
                 $('#modalCorreo').val(user.email);
                 $('#modalEstado').html(user.is_active ? '<span class="badge badge-outline-success">Activo</span>' : '<span class="badge badge-outline-danger">Inactivo</span>');
-                let gruposHTML = '';
+
+                // Mostrar grupos
+                let groupsHTML = '';
                 user.groups.forEach(group => {
-                    gruposHTML += `<a href="javascript: void(0);" class="text-reset mb-2 d-block"><i class="mdi mdi-checkbox-blank-circle-outline me-1 text-success"></i><span class="mb-0 mt-1">${group}</span></a>`;
+                    groupsHTML += `<li class="text-reset mb-2 d-block"><i class="mdi mdi-checkbox-blank-circle-outline me-1 text-primary"></i><span class="mb-0 mt-1">${group}</span></li>`;
                 });
-                $('#modalGrupos').html(gruposHTML);
+                $('#modalGroups').html(groupsHTML);
+
+                // Mostrar dashboards
+                let dashboardsHTML = '';
+                user.direct_dashboards.forEach(dashboard => {
+                    dashboardsHTML += `<li class="text-reset mb-2 d-block dashboard-item text-success" data-type="direct"><i class="mdi mdi-checkbox-blank-circle-outline me-1 text-success"></i><span class="mb-0 mt-1">${dashboard[0]}</span></li>`;
+                });
+                user.group_dashboards.forEach(dashboard => {
+                    dashboardsHTML += `<li class="text-reset mb-2 d-block dashboard-item text-warning" data-type="group"><i class="mdi mdi-checkbox-blank-circle-outline me-1 text-warning"></i><span class="mb-0 mt-1">${dashboard[0]}</span></li>`;
+                });
+                $('#modalDashboards').html(dashboardsHTML);
+
+                // Filtro de búsqueda
+                $('#searchDashboards').on('input', function() {
+                    let searchText = $(this).val().toLowerCase();
+                    $('.dashboard-item').each(function() {
+                        const dashboardText = $(this).text().toLowerCase();
+                        if (dashboardText.includes(searchText)) {
+                            $(this).removeClass('hide-item').addClass('show-item');
+                        } else {
+                            $(this).removeClass('show-item').addClass('hide-item');
+                        }
+                    });
+                });
             } else {
                 alert(response.message);
             }

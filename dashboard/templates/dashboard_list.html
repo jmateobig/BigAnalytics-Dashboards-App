@@ -35,14 +35,16 @@
     </div>
 </div>
 
-{% comment %} {% include "modals/info_group.html" %}
-{% include "modals/delete_user.html" %} {% endcomment %}
+{% include "modals/info_dashboard.html" %}
+{% include "modals/delete_dashboard.html" %}
 {% endblock content %}
 
 {% block extra_javascript %}
 <script src="{% static 'js/app/dashboard.js' %}"></script>
 <script>
-    var url_get_dashboard =  "{% url 'dashboard:get_dashboards' %}";
+    var url_get_dashboards =  "{% url 'dashboard:get_dashboards' %}";
+    var url_get_dashboard =   "{% url 'dashboard:get_dashboard' %}";
+    var url_delete_dashboard = "{% url 'dashboard:delete' %}";
     
     var columnas = [
                 { data: 'id' },
@@ -79,7 +81,7 @@
 
     // DATATABLE
     document.addEventListener('DOMContentLoaded', function () {
-        loadTableData(url_get_dashboard, columnas);
+        loadTableData(url_get_dashboards, columnas);
     });
 </script>
 {% endblock extra_javascript %}
