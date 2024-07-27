@@ -2,7 +2,7 @@ from django.views.generic import  ListView, View, TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission
-
+import base64
 from notification.services import send_notification_to_users_and_groups
 from .models import Dashboard
 from django.db.models import Q
@@ -298,7 +298,9 @@ class DashboardRenderView(LoginRequiredMixin, TemplateView):
         if not self.has_permission(permission, request.user):
             raise PermissionDenied
         
+        encoded = base64.b64encode(dashboard.url.encode()).decode()
         context = {
-            'dashboard': dashboard
+            'dashboard': dashboard,
+            'encoded':encoded
         }
         return self.render_to_response(context)
