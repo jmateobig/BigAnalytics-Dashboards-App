@@ -2,6 +2,8 @@ from django.views.generic import  ListView, View, TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission
+
+from notification.services import send_notification_to_users_and_groups
 from .models import Dashboard
 from django.db.models import Q
 from django.http import JsonResponse
@@ -113,6 +115,16 @@ class DashboardCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateVie
         for user in users:
             user.user_permissions.add(permission)
 
+        if users or groups:
+            send_notification_to_users_and_groups(
+                title="Acceso al Nuevo Dashboard",
+                description=f"Se te ha otorgado acceso al nuevo Dashboard '{dashboard.name}'.",
+                url=reverse_lazy('dashboard:render', args=[dashboard.id]),
+                user_list=users,
+                group_list=groups
+            )
+
+
         return super().form_valid(form)
     
 
@@ -181,12 +193,52 @@ class DashboardEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
         dashboard = get_object_or_404(Dashboard, pk=dashboard_id)
         form = DashboardEditForm(request.POST, instance=dashboard)
         if form.is_valid():
-            form.save()
+            
+            # Obtener permisos antiguos del dashboard
+            old_groups_ids = set(Group.objects.filter(permissions=dashboard.permission).values_list('id', flat=True))
+            old_users_ids = set(User.objects.filter(user_permissions=dashboard.permission).values_list('id', flat=True))
+            old_groups = Group.objects.filter(id__in=old_groups_ids)
+            old_users = User.objects.filter(id__in=old_users_ids)
+
+            # Guardar los cambios del formulario
+            dashboard = form.save()
+
             # Update groups and users with the permission
             groups = form.cleaned_data['groups']
             users = form.cleaned_data['users']
+
+            # Actualizar grupos y usuarios con el permiso
             dashboard.permission.group_set.set(groups)
             dashboard.permission.user_set.set(users)
+
+            # Calcular grupos y usuarios añadidos y eliminados
+            new_groups = set(groups)
+            new_users = set(users)
+
+            added_groups = new_groups - set(old_groups)
+            removed_groups = set(old_groups) - new_groups
+
+            added_users = new_users - set(old_users)
+            removed_users = set(old_users) - new_users
+
+            if removed_users or removed_groups:
+                send_notification_to_users_and_groups(
+                    title="Acceso al Dashboard Revocado",
+                    description=f"Se te ha retirado el acceso al Dashboard '{dashboard.name}'.",
+                    url=reverse_lazy('notification:list'),
+                    user_list=list(removed_users),
+                    group_list=list(removed_groups)
+                )
+
+            if added_groups or added_users:
+                send_notification_to_users_and_groups(
+                    title="Acceso al Dashboard Concedido",
+                    description=f"Se te ha otorgado acceso al Dashboard '{dashboard.name}'.",
+                    url=reverse_lazy('dashboard:render', args=[dashboard_id]),
+                    user_list=list(added_users),
+                    group_list=list(added_groups)
+                )
+
             messages.success(request, '¡Dashboard actualizado con éxito!')
             return redirect(self.success_url)
         return render(request, self.template_name, {'form': form, 'dashboard': dashboard})

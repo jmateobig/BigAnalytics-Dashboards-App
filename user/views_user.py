@@ -13,7 +13,7 @@ from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
 from allauth.account.models import EmailAddress
-
+from notification.services import send_notification_to_users_and_groups
 from dashboard.models import Dashboard
 from .forms import UserCreateForm, UserEditForm
 from django.contrib.auth.models import Permission
@@ -88,7 +88,12 @@ class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         to_email = user.email
 
         send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+        send_welcome_notifications(user=user)
+        
+        group_names=user.groups.values_list('name', flat=True) 
+        send_group_notifications(user=user, title="Actualización de Grupos", description=f"Los grupos a los que perteneces han sido cambiados a: {', '.join(group_names)}")
         messages.success(self.request, 'Usuario creado exitosamente y correo de bienvenida enviado.')
+
         return super().form_valid(form)
 
 
@@ -141,11 +146,32 @@ class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
         user = get_object_or_404(User, pk=user_id)
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
+            # Guardar los grupos actuales antes de actualizar
+            old_group_ids = set(user.groups.values_list('id', flat=True))
+            old_groups = Group.objects.filter(id__in=old_group_ids)
+
+            # Guardar los cambios del formulario
             form.save()
             # Update user groups
             group_ids = request.POST.getlist('groups')
+            groups = Group.objects.filter(id__in=group_ids)
             user.groups.set(group_ids)
             user.save()
+
+            # Calcular grupos añadidos y eliminados
+            added_groups = groups.difference(old_groups)
+            removed_groups = old_groups.difference(groups)
+            
+            #Enviar Notificaciones
+            if removed_groups:
+                group_names=added_groups.values_list('name', flat=True) 
+                send_group_notifications(user=user, title="Actualización de Grupos", description=f"Se ha elimiado su acceso a los Grupos: {', '.join(group_names)}")
+
+            if added_groups:
+                group_names=added_groups.values_list('name', flat=True) 
+                send_group_notifications(user=user, title="Actualización de Grupos", description=f"Se ha creado el acceso a los Grupos: {', '.join(group_names)}")
+
+
             messages.success(request, 'Usuario actualizado con éxito!')
             return redirect(self.success_url)  # Redirigir a la lista de usuarios después de guardar los cambios
         groups = Group.objects.all()
@@ -211,3 +237,18 @@ class ProfileEditView(LoginRequiredMixin, TemplateView):
         
         messages.success(request, '¡Perfil actualizado con éxito!')
         return redirect('user:profile')
+
+
+
+def send_welcome_notifications(user):
+    # Notificación de bienvenida
+    notification_title = "Bienvenido al sistema"
+    notification_description = f"Hola {user.username}, bienvenido al sistema. ¡Estamos felices de tenerte aquí!"
+    notification_url = reverse_lazy('notification:list')  # URL a la que se puede redirigir desde la notificación
+    send_notification_to_users_and_groups(user_list=[user], group_list=[], title=notification_title, description=notification_description, url=notification_url)
+
+def send_group_notifications(user, title, description):
+    # Notificación sobre cambios en grupos
+    if user.groups.exists():
+        notification_url = reverse_lazy('notification:list')
+        send_notification_to_users_and_groups(user_list=[user], group_list=[], title=title, description=description, url=notification_url)

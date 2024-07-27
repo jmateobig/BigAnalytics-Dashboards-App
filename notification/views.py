@@ -1,22 +1,20 @@
-from django.contrib.auth.decorators import permission_required
-from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from .models import Notification
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.timesince import timesince
 from django.shortcuts import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
     
-@method_decorator(permission_required('notification.view_notification', raise_exception=True), name='dispatch')
+
 class NotificationListView(LoginRequiredMixin, ListView):
     model = Notification
     template_name = 'notification_list.html'
     context_object_name = 'notifications'
-    ordering = ['-created_at']
+    # permission_required = 'notification.view_notification'
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user)
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
 
 
 @login_required

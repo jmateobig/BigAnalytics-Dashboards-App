@@ -9,6 +9,7 @@ from django.db.models import Value
 from django.db.models.functions import Concat
 from django.urls import reverse_lazy
 from .forms import GroupCreateForm, GroupEditForm
+from notification.services import send_notification_to_users_and_groups
 
 
 class GroupListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -64,7 +65,8 @@ class GroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         group = form.save()
         users = form.cleaned_data['users']
         group.user_set.set(users)
-        messages.success(self.request, 'Grupo creado exitosamente y correo de bienvenida enviado.')
+        send_group_notification(users=users, title="Añadido a un nuevo grupo",  description=f"Has sido añadido al grupo: {group.name}.")
+        messages.success(self.request, 'Grupo creado exitosamente')
         return super().form_valid(form)
 
 
@@ -99,11 +101,25 @@ class GroupEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
         group = get_object_or_404(Group, pk=group_id)
         form = GroupEditForm(request.POST, instance=group)
         if form.is_valid():
+            # Obtener los usuarios actuales del grupo
+            old_users = set(group.user_set.all())
+
+            # Guardar los cambios del formulario
             form.save()
             # Update group users
             user_ids = request.POST.getlist('users')
-            group.user_set.set(user_ids)
+            users = User.objects.filter(id__in=user_ids)
+            group.user_set.set(users)
             group.save()
+
+            # Calcular grupos añadidos y eliminados
+            updated_users = set(group.user_set.all())
+            added_users = updated_users.difference(old_users)
+            removed_users = old_users.difference(updated_users)
+
+            send_group_notification(users=added_users,   title="Añadido a un Nuevo Grupo", description=f"Has sido añadido al grupo '{group.name}'.")
+            send_group_notification(users=removed_users, title="Eliminación del Grupo",    description=f"Has sido eliminado del grupo '{group.name}'.")
+
             messages.success(request, '¡Grupo actualizado con éxito!')
             return redirect(self.success_url)  # Redirigir a la lista de grupos después de guardar los cambios
         return render(request, self.template_name, {'form': form, 'group': group})
@@ -125,3 +141,12 @@ class GroupDeleteView(View):
             return JsonResponse({'status': 'error', 'message': 'Grupo no encontrado'}, status=404)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
+
+def send_group_notification(users, title, description):
+        # Configurar el título y la descripción de la notificación
+        notification_url = reverse_lazy('notification:list')  # URL a la que se puede redirigir desde la notificación
+        # Enviar la notificación usando el servicio
+        send_notification_to_users_and_groups(
+            user_list=users, group_list=[], title=title, description=description, url=notification_url
+        )
