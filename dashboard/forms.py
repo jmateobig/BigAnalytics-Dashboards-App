@@ -24,6 +24,14 @@ class DashboardCreateForm(forms.ModelForm):
         label='Usuarios a asignar'
     )
 
+    def __init__(self, *args, **kwargs):
+        super(DashboardCreateForm, self).__init__(*args, **kwargs)
+        self.fields['users'].label_from_instance = self.user_label_from_instance
+
+    @staticmethod
+    def user_label_from_instance(user):
+        return f"{user.first_name} ({user.email})"
+
     class Meta:
         model = Dashboard
         fields = ['name', 'title', 'description', 'url', 'groups', 'users']
@@ -47,6 +55,14 @@ class DashboardEditForm(forms.ModelForm):
         widget=CustomSelect2Multiple,  # Puedes usar un widget personalizado si lo tienes
         label='Usuarios'
     )
+
+    def __init__(self, *args, **kwargs):
+        super(DashboardEditForm, self).__init__(*args, **kwargs)
+        self.fields['users'].label_from_instance = self.user_label_from_instance
+
+    @staticmethod
+    def user_label_from_instance(user):
+        return f"{user.get_full_name()} ({user.email})"
 
     class Meta:
         model = Dashboard

@@ -23,7 +23,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
     template_name = 'user_list.html'
     context_object_name = 'users'
-    permission_required = 'publicacion.add_user'
+    permission_required = 'publicacion.view_user'
 
 class UserListJsonView(View):
     def post(self, request, *args, **kwargs):
@@ -82,7 +82,7 @@ class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
         # Enviar correo de bienvenida
         subject = 'Bienvenido a Nuestro Servicio'
-        html_message = render_to_string('email/welcome_email.html', {'user': user, 'domain': domain })
+        html_message = render_to_string('account/email/welcome_email.html', {'user': user, 'domain': domain })
         plain_message = strip_tags(html_message)
         from_email = settings.EMAIL_HOST_USER
         to_email = user.email

@@ -32,20 +32,27 @@ function verGrupo(groupId) {
         success: function(response) {
             if (response.status === 'success') {
                 const group = response.data;
-                $('#modalNombre').text(group.name);
+                $('#modalNombre').val(group.name);
                 let usuariosHTML = '';
                 group.users.forEach(user => {
-                    usuariosHTML += `
-                        <div class="inbox-item">
-                            <p class="inbox-item-author">
-                                ${user.is_active ? '<i class="mdi mdi-checkbox-blank-circle-outline me-1 text-success"></i>' : '<i class="mdi mdi-checkbox-blank-circle-outline me-1 text-danger"></i>'}
-                                ${user.username}
-                            </p>
-                            <p class="inbox-item-text">${user.full_name}</p>
-                        </div>
-                    `;
+                    const userClass = user.is_active === true ? 'text-success' : 'text-danger';
+                    usuariosHTML += `<li class="text-reset mb-2 d-block usuario-item ${userClass}"><i class="mdi mdi-checkbox-blank-circle-outline me-1 ${userClass}"></i><span class="mb-0 mt-1">${user.full_name} (${user.email})</span></li>`;
                 });
                 $('#modalUsuarios').html(usuariosHTML);
+
+                // Agregar event listener para la búsqueda
+                $('#searchUsuarios').on('input', function() {
+                    const searchText = $(this).val().toLowerCase();
+                    $('#modalUsuarios .usuario-item').each(function() {
+                        const userText = $(this).text().toLowerCase();
+                        if (userText.includes(searchText)) {
+                            $(this).removeClass('hide-item').addClass('show-item');
+                        } else {
+                            $(this).removeClass('show-item').addClass('hide-item');
+                        }
+                    });
+                });
+
             } else {
                 alert(response.message);
             }

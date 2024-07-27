@@ -23,7 +23,7 @@ class DashboardListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Dashboard
     template_name = 'dashboard_list.html'
     context_object_name = 'dashboards'
-    permission_required = 'dashboard.add_dashboard'
+    permission_required = 'dashboard.view_dashboard'
 
 
 class DashboardListJsonView(View):
@@ -280,7 +280,9 @@ class DashboardRenderView(LoginRequiredMixin, TemplateView):
 
     def has_permission(self, permission, user):
         admin_group = Group.objects.filter(name='Admin').first()
-        if admin_group and admin_group in user.groups.all():
+        staff_group = Group.objects.filter(name='Staff').first()
+        
+        if admin_group  in user.groups.all() or staff_group in user.groups.all():
             return True
         direct_permission_codenames = set(user.user_permissions.values_list('codename', flat=True))
         group_permission_codenames = set(Permission.objects.filter(group__user=user).values_list('codename', flat=True))

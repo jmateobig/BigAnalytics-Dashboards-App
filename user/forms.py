@@ -76,6 +76,15 @@ class GroupCreateForm(forms.ModelForm):
         label='Usuarios'
     )
 
+    def __init__(self, *args, **kwargs):
+        super(GroupCreateForm, self).__init__(*args, **kwargs)
+        self.fields['users'].label_from_instance = self.user_label_from_instance
+
+    @staticmethod
+    def user_label_from_instance(user):
+        return f"{user.first_name} ({user.email})"
+
+
     class Meta:
         model = Group
         fields = ['name', 'users']
@@ -91,6 +100,14 @@ class GroupEditForm(forms.ModelForm):
         widget=CustomSelect2Multiple,  # Usar el widget de checkboxes
         label='Usuarios'
     )
+
+    def __init__(self, *args, **kwargs):
+        super(GroupEditForm, self).__init__(*args, **kwargs)
+        self.fields['users'].label_from_instance = self.user_label_from_instance
+
+    @staticmethod
+    def user_label_from_instance(user):
+        return f"{user.get_full_name()} ({user.email})"
 
     class Meta:
         model = Group

@@ -17,7 +17,6 @@ def send_notification_to_users_and_groups(title, description, url, user_list=Non
 
     # Enviar la notificación a todos los usuarios únicos
     for user in all_users:
-        print(user)
         notificacion=Notification.objects.create(
             title=title,
             description=description,

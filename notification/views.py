@@ -30,7 +30,7 @@ def Notification_ajax(request):
         })
     return JsonResponse(data, safe=False)
 
-
+@login_required
 def Notification_clear(request):
     notifications = Notification.objects.filter(user=request.user, seen=False)
     notifications.update(seen=True)

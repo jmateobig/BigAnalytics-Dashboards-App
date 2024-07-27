@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // función para llamar al servicio de notificaciones
+    // Función para llamar al servicio de notificaciones
     function getNotifications() {
         $.ajax({
             url: '/notification/notification',
@@ -9,31 +9,36 @@ $(document).ready(function() {
                 $('.noti-icon-badge').text(data.length);
 
                 var notificationsList = $('.noti-scroll');
-                    for (var i = 0; i < data.length; i++) {
-                     
-                        var notification = data[i];
-                        var description = notification.description;
-                        var notificationItem = $('<a href="'+notification.url+'" class="dropdown-item notify-item" title="'+description+'"></a>');
-                        var notifyIcon = $('<div class="notify-icon bg-primary"><i class="mdi mdi-comment-account-outline"></i></div>');
-                        var notifyTitle = $('<h5 class="mt-0"></h5>');
-                        var notifyDetails = $('<p class="notify-details"></p>');
-                     
-                        notifyDetails.html(description + '<br><small class="text-muted">' + notification.created_at+ '</small>');
-                        notifyTitle.html(notification.title);
-                        
-                        notificationItem.append(notifyIcon);
-                        notificationItem.append(notifyTitle);
-                        notificationItem.append(notifyDetails);
-                        notificationsList.append(notificationItem);
-                    }
+                notificationsList.empty(); // Limpiar la lista de notificaciones antes de agregar nuevas
+
+                for (var i = 0; i < data.length; i++) {
+                    var notification = data[i];
+                    var description = notification.description;
+                    var notificationItem = $('<a href="'+notification.url+'" class="dropdown-item notify-item" title="'+description+'"></a>');
+                    var notifyIcon = $('<div class="notify-icon bg-primary"><i class="mdi mdi-comment-account-outline"></i></div>');
+                    var notifyTitle = $('<h5 class="mt-0"></h5>');
+                    var notifyDetails = $('<p class="notify-details"></p>');
+
+                    notifyDetails.html(description + '<br><small class="text-muted">' + notification.created_at + '</small>');
+                    notifyTitle.html(notification.title);
+
+                    notificationItem.append(notifyIcon);
+                    notificationItem.append(notifyTitle);
+                    notificationItem.append(notifyDetails);
+                    notificationsList.append(notificationItem);
+                }
             },
             error: function(error) {
                 console.log(error);
             }
         });
     }
-    // llamamos a la función para obtener las notificaciones
+
+    // Llamamos a la función para obtener las notificaciones cuando se carga la página
     getNotifications();
+
+    // Configurar intervalo para llamar a la función cada minuto (60000 milisegundos)
+    setInterval(getNotifications, 60000);
 });
 
 

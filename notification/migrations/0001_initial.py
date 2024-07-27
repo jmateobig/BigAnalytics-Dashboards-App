@@ -18,10 +18,12 @@ def create_initial_data(apps, schema_editor):
     
     # Obtiene los grupos
     group_admin         = Group.objects.get(name='Admin')
+    group_staff         = Group.objects.get(name='Staff')
     group_client        = Group.objects.get(name='Default')
     
     # Agrega los permisos a los grupos Admin y Client
     group_admin.permissions.add(permission_add, permission_change, permission_delete, permission_view)
+    group_staff.permissions.add(permission_view)
     group_client.permissions.add(permission_view)
 
     

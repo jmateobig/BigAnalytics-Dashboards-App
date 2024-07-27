@@ -16,7 +16,7 @@ class GroupListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Group
     template_name = 'group_list.html'
     context_object_name = 'group'
-    permission_required = 'publicacion.add_group'
+    permission_required = 'publicacion.view_group'
 
 
 class GroupListJsonView(View):
@@ -79,7 +79,7 @@ class GroupDetailJsonView(View):
             data = {
                 'id': group.id,
                 'name': group.name,
-                'users': list(users.annotate(full_name=Concat('first_name', Value(' '), 'last_name')).values('username', 'full_name', 'is_active')),
+                'users': list(users.annotate(full_name=Concat('first_name', Value(' '), 'last_name')).values('email', 'full_name', 'is_active')),
             }
             return JsonResponse({'status': 'success', 'data': data})
         except Group.DoesNotExist:
@@ -129,7 +129,7 @@ class GroupDeleteView(View):
     def post(self, request, *args, **kwargs):
         group_id = request.POST.get('group_id')
         try:
-            if int(group_id) in [1, 2]:
+            if int(group_id) in [1, 2, 3]:
                 return JsonResponse({'status': 'error', 'message': 'No se puede eliminar este grupo'}, status=403)
                 
             group = Group.objects.get(pk=group_id)

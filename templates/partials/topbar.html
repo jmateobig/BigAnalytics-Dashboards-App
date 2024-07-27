@@ -105,7 +105,7 @@
                 </a>
                 <!-- End mobile menu toggle-->
             </li>   
-            {% if perms.publicacion.view_user %}
+            {% if perms.publicacion.administration %}
                 <li class="dropdown d-none d-xl-block">
                     <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         Administracion
@@ -113,21 +113,27 @@
                     </a>
                     <div class="dropdown-menu">
                         <!-- item-->
-                        <a href="{% url 'user:list' %}" class="dropdown-item">
-                            <i class="fe-user me-1"></i>
-                            <span>Usuarios</span>
-                        </a>
+                        {% if perms.publicacion.view_user %}
+                            <a href="{% url 'user:list' %}" class="dropdown-item">
+                                <i class="fe-user me-1"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        {% endif %}
 
-                        <a href="{% url 'group:list' %}" class="dropdown-item">
-                            <i class="fe-users me-1"></i>
-                            <span>Grupos</span>
-                        </a>
+                        {% if perms.publicacion.view_group %}
+                            <a href="{% url 'group:list' %}" class="dropdown-item">
+                                <i class="fe-users me-1"></i>
+                                <span>Grupos</span>
+                            </a>
+                        {% endif %}
         
-                        <!-- item-->
-                        <a href="{% url 'dashboard:list' %}" class="dropdown-item">
-                            <i class="fe-bar-chart-line- me-1"></i>
-                            <span>Dashboards</span>
-                        </a>
+                        {% if perms.dashboard.view_dashboard %}
+                            <a href="{% url 'dashboard:list' %}" class="dropdown-item">
+                                <i class="fe-bar-chart-line- me-1"></i>
+                                <span>Dashboards</span>
+                            </a>
+                        {% endif %}
+
                         <div class="dropdown-divider"></div>
         
                         <!-- item-->
