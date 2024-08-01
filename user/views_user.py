@@ -164,7 +164,7 @@ class UserEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             
             #Enviar Notificaciones
             if removed_groups:
-                group_names=added_groups.values_list('name', flat=True) 
+                group_names=removed_groups.values_list('name', flat=True) 
                 send_group_notifications(user=user, title="Actualización de Grupos", description=f"Se ha elimiado su acceso a los Grupos: {', '.join(group_names)}")
 
             if added_groups:
