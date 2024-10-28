@@ -258,3 +258,12 @@ legend{
 .hide-item {
     display: none !important;
 }
+
+
+
+#imagen-home
+{
+    height: auto;
+    width: 66%;
+    margin: 4em 16em;
+}
