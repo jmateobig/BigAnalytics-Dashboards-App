@@ -9,7 +9,7 @@
 
     /* Colores para el sidebar secundario*/
     --color-sidebar-two:#ffffff;
-    --color-sidebar-two-font-title:#adb5bd;
+    --color-sidebar-two-font-title:#E1E2E4;
     
     /* Colores para los items del sidebar secundario*/
     --color-sidebar-two-font-item:#8d8d8d;
@@ -28,7 +28,7 @@
     /* Colores para los botones y alertas*/
     --color-principal:#3bc0a3;
     --color-principal-hover:#21927a;
-    --color-principal-font:#ffffff;
+    --color-principal-font:#ffffff; 
 
     --color-secundario:#dad732;
     --color-secundario-hover:#b9b720;
@@ -69,7 +69,7 @@
 }
 
 .sidebar2-color a:hover, .sidebar2-color a:visited, .sidebar2-color a:active {
-    color: var(--color-sidebar-two-font-item-hover) !important;
+    color: #8D8C8E !important;
 }
 
 .page-title-box h4{
@@ -167,6 +167,6 @@
 .select2-container .select2-selection--single .select2-selection__rendered {
     line-height: 36px !important;
     padding-left: 12px !important;
-    color: #6c757d !important;
+    color: #8D8C8E !important;
     text-align: left !important;
 }

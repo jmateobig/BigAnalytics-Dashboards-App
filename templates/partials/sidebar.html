@@ -7,7 +7,7 @@
                 <!-- LOGO -->
                 <a href="{% url 'index' %}" class="logo">
                     <span>
-                        <img src="{% static 'images/logo-sm.png' %}" alt="" height="28">
+                        <img src="{% static 'images/logo.png' %}" alt="" height="28">
                     </span>
                 </a>
                 <nav class="nav flex-column" id="two-col-sidenav-main">
@@ -26,11 +26,11 @@
                     
                     <div class="twocolumn-menu-item d-block" id="dashboard">
                         <div class="title-box">
-                            <h5 class="menu-title">Tableros</h5>
+                            <h4 class="text-title ps-3 mb-2">Tableros</h4>
                             <ul class="nav flex-column"> 
-                                {% if direct_dashboards %}
+                                {% if direct_dashboards %} 
                                     <li class="nav-item">
-                                        <a href="#Asignaciones" data-bs-toggle="collapse" class="nav-link">
+                                        <a href="#Asignaciones" data-bs-toggle="collapse" class="nav-link sidebar-link">
                                             <span> Asignaciones </span>
                                             <span class="menu-arrow"></span>
                                         </a>
@@ -38,7 +38,7 @@
                                             <ul class="nav-second-level">
                                                 {% for dashboard in direct_dashboards %}
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
+                                                        <a class="nav-link sidebar-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
@@ -50,7 +50,7 @@
                             {% for group, dashboards in group_dashboards_by_group.items %}
                                 <ul class="nav flex-column"> 
                                     <li class="nav-item">
-                                        <a href="#group-{{ group.id }}" data-bs-toggle="collapse" class="nav-link">
+                                        <a href="#group-{{ group.id }}" data-bs-toggle="collapse" class="nav-link sidebar-link">
                                             <span> {{ group.name }} </span>
                                             <span class="menu-arrow"></span>
                                         </a>
@@ -58,7 +58,7 @@
                                             <ul class="nav-second-level">
                                                 {% for dashboard in dashboards %}
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
+                                                        <a class="nav-link sidebar-link" href="{% url 'dashboard:render' dashboard.id %}">{{ dashboard.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
@@ -69,11 +69,11 @@
                         </div>
                     </div>
                     <div class="twocolumn-menu-item" id="settings">
-                        <h5 class="menu-title">Configuraciones</h5>
+                        <h6 class="text-title ps-2" >Configuraciones</h6>
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Contacto</a>
+                                    <a class="nav-link sidebar-link" href="#">Contacto</a>
                                 </li>
                         </ul>
                     </div>

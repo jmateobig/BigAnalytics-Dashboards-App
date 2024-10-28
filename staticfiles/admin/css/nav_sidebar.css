@@ -94,7 +94,7 @@
 
 #nav-sidebar .current-app .section:link,
 #nav-sidebar .current-app .section:visited {
-    color: var(--header-color);
+    color: #8D8C8E;
     font-weight: bold;
 }
 

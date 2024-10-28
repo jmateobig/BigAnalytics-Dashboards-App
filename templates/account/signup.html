@@ -15,22 +15,11 @@
 
     <!--Auth fluid left content -->
     <div class="auth-fluid-form-box">
-        <div class="align-items-center d-flex h-100">
+        <div class="align-items-center d-flex">
             <div class="card-body">
 
-                <!-- Logo -->
-                <div class="auth-brand text-center text-lg-start">
-                    <div class="auth-logo">
-                        <a href="index.html" class="logo logo-dark text-center">
-                            <span class="logo-lg">
-                                <img src="{% static 'images/logo.png' %}" alt="" height="22">
-                            </span>
-                        </a>
-                    </div>
-                </div>
-
                 <!-- title-->
-                <h4 class="mt-0">Registrarse</h4>
+                <h4 class="mt-0 text-title">Registrarse</h4>
                 <p class="text-muted mb-4">¿No tienes una cuenta? Crea tu cuenta, te llevará menos de un minuto</p>
 
                 <!-- form -->
@@ -40,16 +29,15 @@
                     {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                     {% endif %}
-                    <div class="text-center d-grid">
-                        <button class="primaryAction btn color-principal btn-block" type="submit">{% trans "Registrar" %}</button>
+                    <div class="text-center d-grid mb-0">
+                        <button class="primaryAction btn color-principal btn-block mb-2" type="submit">{% trans "Registrar" %}</button>
                     </div>
+                    <p class="text-muted mt-0">¿Ya tienes cuenta? <a class="text-muted-blue"  href="{% url 'account_login' %}" class="text-muted ms-1"><b>Iniciar la sesión</b></a></p>
                 </form>
                 <!-- end form-->
 
-                <!-- Footer-->
-                <footer class="footer footer-alt">
-                    <p class="text-muted">¿Ya tienes cuenta?<a href="{% url 'account_login' %}" class="text-muted ms-1"><b>Iniciar la sesión</b></a></p>
-                </footer>
+                
+                
 
             </div> <!-- end .card-body -->
         </div> <!-- end .align-items-center.d-flex.h-100-->

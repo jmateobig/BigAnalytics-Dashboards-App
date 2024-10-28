@@ -1,7 +1,7 @@
 {% load static i18n %}
 <!-- Topbar Start -->
 <div class="navbar-custom" style="background-color: var(--color-navbar) !important; color: var(--color-navbar-font) !important;">
-    <div class="container-fluid">
+    <div class="container-fluid"> 
         <ul class="list-unstyled topnav-menu float-end mb-0">
             <li class="dropdown notification-list topbar-dropdown">
                 <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false" id="notifications_content">
@@ -106,7 +106,7 @@
                 <!-- End mobile menu toggle-->
             </li>   
             {% if perms.publicacion.administration %}
-                <li class="dropdown d-none d-xl-block">
+                <li class="dropdown d-none d-xl-block staticfiles/images/logo.png">
                     <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         Administracion
                         <i class="mdi mdi-chevron-down"></i> 

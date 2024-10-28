@@ -492,7 +492,7 @@ span.clearable-file-input label {
 
 .calendarnav a:link, #calendarnav a:visited,
 #calendarnav a:focus, #calendarnav a:hover {
-    color: var(--body-quiet-color);
+    color: #8D8C8E;
 }
 
 .calendar-shortcuts {
