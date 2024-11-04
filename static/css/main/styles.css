@@ -126,7 +126,7 @@ legend{
 }
 
 .sidebar-color{
-    background-color: var(--color-sidebar) !important;
+    background-color: #000000 !important;
     color: var(--color-sidebar-font) !important;
 }
 
