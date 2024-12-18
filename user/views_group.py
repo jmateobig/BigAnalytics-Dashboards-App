@@ -76,9 +76,11 @@ class GroupDetailJsonView(View):
         try:
             group = Group.objects.get(pk=group_id)
             users = User.objects.filter(groups=group)
+            category_name = group.category.name if group.category else None
             data = {
                 'id': group.id,
                 'name': group.name,
+                'category': category_name,
                 'users': list(users.annotate(full_name=Concat('first_name', Value(' '), 'last_name')).values('email', 'full_name', 'is_active')),
             }
             return JsonResponse({'status': 'success', 'data': data})
