@@ -27,6 +27,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
 
     path('user/',include('user.urls_user')),
+    path('category/',include('category.urls')),
     path('group/',include('user.urls_group')),
     path('dashboard/',include('dashboard.urls')),
     path('notification/',include('notification.urls')),

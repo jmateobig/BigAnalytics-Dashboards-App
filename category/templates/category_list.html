@@ -1,7 +1,7 @@
 {% extends "layouts/_layout_project.html" %}
 {% load static i18n %}
 
-{% block title %} Project :: Dashboards{% endblock title %}
+{% block title %} Project :: Categorias{% endblock title %}
 
 {% block content %}
 <div class="container-fluid">
@@ -11,9 +11,12 @@
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col-md-8">
-                            <a href="{% url 'dashboard:create' %}" title="Crear Dashboard">
-                                <h2 class="mb-4">Dashboards<i class="fe-plus me-1"></i></h2>
+                            <a href="{% url 'category:create' %}" title="Crear Categoria">
+                                <h2 class="mb-4">Categorias<i class="fe-plus me-1"></i></h2>
                             </a>
+                            {% comment %} <a href="#" title="Crear Categoria">
+                                <h2 class="mb-4">Categorias<i class="fe-plus me-1"></i></h2>
+                            </a> {% endcomment %}
                         </div>
                     </div>
                     <table id="basic-datatable" class="table dt-responsive nowrap w-100">
@@ -21,10 +24,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nombre</th>
-                                <th>Título</th>
                                 <th>Descripción</th>
-                                <th>URL</th>
-                                <th>Usuarios con Acceso</th>
                                 <th style="width: 100px !important;">Acciones</th>
                             </tr>
                         </thead>
@@ -35,30 +35,20 @@
     </div>
 </div>
 
-{% include "modals/info_dashboard.html" %}
-{% include "modals/delete_dashboard.html" %}
+{% include "modals/info_category.html" %}
+{% include "modals/delete_category.html" %}
 {% endblock content %}
 
 {% block extra_javascript %}
-<script src="{% static 'js/app/dashboard.js' %}"></script>
+<script src="{% static 'js/app/category.js' %}"></script>
 <script>
-    var url_get_dashboards =   "{% url 'dashboard:get_dashboards' %}";
-    var url_get_dashboard =    "{% url 'dashboard:get_dashboard' %}";
-    var url_delete_dashboard = "{% url 'dashboard:delete' %}";
+    var url_get_categories =  "{% url 'category:get_categories' %}";
+    var url_get_category =    "{% url 'category:get_category' %}";
+    var url_delete_category = "{% url 'category:delete' %}";
     
     var columnas = [
                 { data: 'id' },
                 { data: 'name' },
-                {
-                    data: 'title',
-                    render: function(data, type, row) {
-                        if (data.length > 15) {
-                            return '<span title="' + data + '">' + data.substr(0, 20) + '...</span>';
-                        } else {
-                            return '<span title="' + data + '">' + data + '</span>';
-                        }
-                    }
-                },
                 {
                     data: 'description',
                     render: function(data, type, row) {
@@ -69,19 +59,12 @@
                         }
                     }
                 },
-                {
-                    data: 'url',
-                    render: function(data, type, row) {
-                        return '<a href="' + data + '" target="_blank">' + row.title + '</a>';
-                    }
-                },
-                { data: 'num_users' },
                 { data: 'id', render: function (data, type, row) { return renderOpciones(row); } }
             ];
 
     // DATATABLE
     document.addEventListener('DOMContentLoaded', function () {
-        loadTableData(url_get_dashboards, columnas);
+        loadTableData(url_get_categories, columnas);
     });
 </script>
 {% endblock extra_javascript %}
