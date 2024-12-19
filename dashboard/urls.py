@@ -12,6 +12,3 @@ urlpatterns = [
     path('api/dashboard/delete/',      (DashboardDeleteView.as_view()),         name='delete'),
     path('render/<int:dashboard_id>/', (DashboardRenderView.as_view()),         name='render'),
 ]
-
-
-

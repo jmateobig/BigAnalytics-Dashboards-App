@@ -11,6 +11,3 @@ urlpatterns = [
     path('<int:group_id>/edit/',     (GroupEditView.as_view()),             name='edit'),
     path('api/group/delete/',        (GroupDeleteView.as_view()),           name='delete_group'),
 ]
-
-
-
