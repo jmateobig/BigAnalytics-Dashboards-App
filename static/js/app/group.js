@@ -7,7 +7,7 @@ function renderOpciones(row) {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verGrupo(${row.id})">Información</button>
-                <a class="dropdown-item" href="/group/${row.id}/edit">Editar</a>
+                <a class="dropdown-item" href="/group/${row.id}/edit/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteGroup(${row.id}, '${row.name}')">Eliminar</button>
             </div>
         </div>
