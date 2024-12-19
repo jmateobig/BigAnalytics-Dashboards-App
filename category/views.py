@@ -84,14 +84,7 @@ class CategoryDetailJsonView(View):
         except Category.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Dashboard not found'}, status=404)
         
-
-# class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-#     model = Category
-#     form_class = CategoryForm
-#     template_name = 'category_create.html'
-#     permission_required = 'category.add_category'
-#     success_url = reverse_lazy('category:list')
-    
+            
 
 class CategoryEditView(UpdateView):
     model = Category
