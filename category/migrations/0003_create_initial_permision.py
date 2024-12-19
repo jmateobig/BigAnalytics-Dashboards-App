@@ -14,14 +14,14 @@ def create_initial_data(apps, schema_editor):
     group_staff         = Group.objects.get(name='Staff')
     
     # Crea los permisos para el modelo category
-    # permission_add =    Permission.objects.create       (codename=  'add_category',     name='Can add category',    content_type=content_type)
+    permission_add =    Permission.objects.create       (codename=  'add_category',     name='Can add category',    content_type=content_type)
     permission_change = Permission.objects.create       (codename=  'change_category',  name='Can change category', content_type=content_type)
     permission_delete = Permission.objects.create       (codename=  'delete_category',  name='Can delete category', content_type=content_type)
     permission_view =   Permission.objects.create       (codename=  'view_category',    name='Can view category',   content_type=content_type)
     
     # Agrega los permisos a los grupos Admin y Client
-    # group_admin.permissions.add(permission_add,permission_change,permission_delete,permission_view)
-    # group_staff.permissions.add(permission_add,permission_change,permission_delete,permission_view)
+    group_admin.permissions.add(permission_add,permission_change,permission_delete,permission_view)
+    group_staff.permissions.add(permission_add,permission_change,permission_delete,permission_view)
     group_admin.permissions.add(permission_change,permission_delete,permission_view)
     group_staff.permissions.add(permission_change,permission_delete,permission_view)
 
