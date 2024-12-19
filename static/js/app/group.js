@@ -33,6 +33,7 @@ function verGrupo(groupId) {
             if (response.status === 'success') {
                 const group = response.data;
                 $('#modalNombre').val(group.name);
+                $('#modalCategoria').val(group.category);
                 let usuariosHTML = '';
                 group.users.forEach(user => {
                     const userClass = user.is_active === true ? 'text-success' : 'text-danger';
