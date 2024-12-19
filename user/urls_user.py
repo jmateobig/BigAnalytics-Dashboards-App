@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/users',                (UserListJsonView.as_view()),           name='get_users'),
     path('create',                   (UserCreateView.as_view()),             name='create'),
     path('api/user/',                (UserDetailJsonView.as_view()),         name='get_user'),
-    path('edit/<int:user_id>/',      (UserEditView.as_view()),               name='edit'),
+    path('<int:user_id>/edit/',      (UserEditView.as_view()),               name='edit'),
     path('api/user/toggle_status/',  (UserToggleStatusView.as_view()),       name='toggle_status_user'),
     path('api/user/delete/',         (UserDeleteView.as_view()),             name='delete_user'),
 

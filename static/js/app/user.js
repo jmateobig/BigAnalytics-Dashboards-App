@@ -13,7 +13,7 @@ function renderOpciones(row) {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verUsuario(${row.id})">Información</button>
-                <a class="dropdown-item" href="/user/edit/${row.id}/">Editar</a>
+                <a class="dropdown-item" href="/user/${row.id}/edit/">Editar</a>
                 <button type="button" class="dropdown-item" onclick="toggleUserStatus(${row.id}, '${row.full_name}', ${row.is_active})">${accionTexto}</button>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteUser(${row.id}, '${row.full_name}')">Eliminar</button>
             </div>
