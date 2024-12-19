@@ -1,0 +1,11 @@
+ALLOWED_HOSTS=127.0.0.1,localhost,192.168.1.2,157.245.121.65
+SECRET_KEY=django-insecure-6y@w&x1172li05jczc@r@1()^d74c@e@%imn8k_t!o5!1^^m)1
+DEBUG=True
+DATABASE_URL=postgres://user:pass@127.0.0.1:5432/DataBase
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_USE_TLS=True
+EMAIL_PORT=587
+EMAIL_HOST_USER='correo@gmail.com'
+EMAIL_HOST_PASSWORD='Password'
