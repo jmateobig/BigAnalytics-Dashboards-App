@@ -5,11 +5,19 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.contrib.auth.models import User, Group
 from django_select2 import forms as s2forms
+from category.models import Category
     
 class CustomSelect2Multiple(s2forms.Select2MultipleWidget):
     def __init__(self, *args, **kwargs):
         kwargs['attrs'] = {'class': 'custom-select2'}  # Puedes personalizar las clases de estilo aquí
         super().__init__(*args, **kwargs)
+
+
+class CustomSelect2(s2forms.Select2Widget):
+    def __init__(self, *args, **kwargs):
+        kwargs['attrs'] = {'class': 'custom-select2'}  # Personaliza las clases de estilo aquí
+        super().__init__(*args, **kwargs)
+
 
 class CustomLoginForm(LoginForm):
     captcha = CaptchaField()
@@ -76,6 +84,14 @@ class GroupCreateForm(forms.ModelForm):
         label='Usuarios'
     )
 
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=True,
+        widget=CustomSelect2,
+        label='Categoría',
+        empty_label="Seleccione una categoría"
+    )
+
     def __init__(self, *args, **kwargs):
         super(GroupCreateForm, self).__init__(*args, **kwargs)
         self.fields['users'].label_from_instance = self.user_label_from_instance
@@ -84,10 +100,9 @@ class GroupCreateForm(forms.ModelForm):
     def user_label_from_instance(user):
         return f"{user.first_name} ({user.email})"
 
-
     class Meta:
         model = Group
-        fields = ['name', 'users']
+        fields = ['name', 'users', 'category']
         labels = {
             'name': 'Nombre del Grupo',
         }
@@ -101,18 +116,29 @@ class GroupEditForm(forms.ModelForm):
         label='Usuarios'
     )
 
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=True,
+        widget=CustomSelect2,
+        label='Categoría',
+        empty_label="Seleccione una categoría"
+    )
+
     def __init__(self, *args, **kwargs):
         super(GroupEditForm, self).__init__(*args, **kwargs)
         self.fields['users'].label_from_instance = self.user_label_from_instance
 
+        # Si es una instancia de edición, configurar la categoría seleccionada
+        if self.instance and self.instance.category:
+            self.fields['category'].initial = self.instance.category
+
     @staticmethod
     def user_label_from_instance(user):
-        return f"{user.get_full_name()} ({user.email})"
+        return f"{user.first_name} ({user.email})"
 
     class Meta:
         model = Group
-        fields = ['name', 'users']
+        fields = ['name', 'users', 'category']
         labels = {
             'name': 'Nombre del Grupo',
         }
-
