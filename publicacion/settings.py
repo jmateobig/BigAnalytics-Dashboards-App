@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     
     'user',
     'dashboard',
-    'notification'
+    'notification',
+    'category'
 ]
 
 
