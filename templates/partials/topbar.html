@@ -113,6 +113,20 @@
                     </a>
                     <div class="dropdown-menu">
                         <!-- item-->
+                        {% if perms.category.view_category %}
+                            <a href="{% url 'category:list' %}" class="dropdown-item">
+                                <i class="fe-git-branch me-1"></i>
+                                <span>Categorias</span>
+                            </a>
+                        {% endif %}
+
+                        {% if perms.publicacion.view_group %}
+                        <a href="{% url 'group:list' %}" class="dropdown-item">
+                            <i class="fe-users me-1"></i>
+                            <span>Grupos</span>
+                        </a>
+                        {% endif %}                        
+                        
                         {% if perms.publicacion.view_user %}
                             <a href="{% url 'user:list' %}" class="dropdown-item">
                                 <i class="fe-user me-1"></i>
@@ -120,20 +134,6 @@
                             </a>
                         {% endif %}
 
-                        {% if perms.publicacion.view_group %}
-                            <a href="{% url 'group:list' %}" class="dropdown-item">
-                                <i class="fe-users me-1"></i>
-                                <span>Grupos</span>
-                            </a>
-                        {% endif %}
-                        
-                        {% if perms.category.view_category %}
-                            <a href="{% url 'category:list' %}" class="dropdown-item">
-                                <i class="fe-git-branch me-1"></i>
-                                <span>Categorias</span>
-                            </a>
-                        {% endif %}
-        
                         {% if perms.dashboard.view_dashboard %}
                             <a href="{% url 'dashboard:list' %}" class="dropdown-item">
                                 <i class="fe-bar-chart-line- me-1"></i>
