@@ -1,11 +1,13 @@
+from django.contrib.auth.models import User
+from allauth.account.models import EmailAddress
 from django.contrib.auth.models import Group
+from category.models import Category
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
 from django.db import migrations
 
 
 def create_initial_data(apps, schema_editor):
-    
     # Crea el contenido para tu aplicación
     content_type     = ContentType.objects.create(app_label='category',model='category')
 
@@ -25,13 +27,25 @@ def create_initial_data(apps, schema_editor):
     group_admin.permissions.add(permission_change,permission_delete,permission_view)
     group_staff.permissions.add(permission_change,permission_delete,permission_view)
 
+    # Crear las categorías
+    category1 = Category.objects.create(name="Categoria 1", description="Descripción para Categoria 1")
+    Category.objects.create(name="Categoria 2", description="Descripción para Categoria 2")
+    Category.objects.create(name="Categoria 3", description="Descripción para Categoria 3")
+
+    # Asignar todos los grupos existentes a "Categoria 1"
+    groups = Group.objects.all()
+    for group in groups:
+        group.category = category1
+        group.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('category', '0002_create_initial_categories'),
+        ('category', '0001_initial'),
+        ("user", "0001_initial"),
     ]
 
     operations = [
-        # Agrega aquí las operaciones de la migración.
         migrations.RunPython(create_initial_data),
     ]
