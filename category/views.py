@@ -4,7 +4,7 @@ from .models import Category
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView
-from .forms import CategoryCreateForm, CategoryEditForm
+from .forms import CategoryForm
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
@@ -85,18 +85,17 @@ class CategoryDetailJsonView(View):
             return JsonResponse({'status': 'error', 'message': 'Dashboard not found'}, status=404)
         
 
-class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    model = Category
-    form_class = CategoryCreateForm
-    template_name = 'category_create.html'
-    form_class = CategoryCreateForm
-    permission_required = 'category.add_category'
-    success_url = reverse_lazy('category:list')
+# class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+#     model = Category
+#     form_class = CategoryForm
+#     template_name = 'category_create.html'
+#     permission_required = 'category.add_category'
+#     success_url = reverse_lazy('category:list')
     
 
 class CategoryEditView(UpdateView):
     model = Category
-    form_class = CategoryEditForm
+    form_class = CategoryForm
     template_name = 'category_edit.html'
     success_url = reverse_lazy('category:list')
 
@@ -106,7 +105,6 @@ class CategoryEditView(UpdateView):
         return form
 
     def form_valid(self, form):
-        # Si necesitas agregar lógica adicional después de validar el formulario
         return super().form_valid(form)
     
 

@@ -19,23 +19,33 @@ def dashboards_context(request):
         # Filtrar dashboards directos eliminando los que ya están en group_dashboards
         direct_dashboards = direct_dashboards.exclude(id__in=group_dashboard_ids)
 
-        # Inicializar un diccionario para almacenar los dashboards por grupo
-        group_dashboards_by_group = {group: [] for group in user_groups}
+        # Inicializar un diccionario para almacenar los dashboards agrupados por categoría y grupo
+        dashboards_by_category = {}
 
-        # Asignar dashboards a cada grupo
-        for dashboard in group_dashboards:
-            # Obtener los grupos asociados a este dashboard
-            groups = dashboard.permission.group_set.filter(id__in=user_group_ids).order_by('id')
-            for group in groups:
-                group_dashboards_by_group[group].append(dashboard)
-                break
+        # Recorrer los grupos del usuario
+        for group in user_groups:
+            # Obtener la categoría asociada al grupo (si existe)
+            category = getattr(group, 'category', None)
 
-        # Eliminar grupos que no contienen dashboards
-        group_dashboards_by_group = {group: dashboards for group, dashboards in group_dashboards_by_group.items() if dashboards}
+            if category:  # Solo agrupar si el grupo tiene una categoría
+                # Asegurarse de que la categoría esté en el diccionario
+                if category not in dashboards_by_category:
+                    dashboards_by_category[category] = {}
+
+                # Obtener los dashboards asociados al grupo
+                dashboards = group_dashboards.filter(permission__group=group).distinct()
+
+                # Agregar el grupo y sus dashboards a la categoría correspondiente
+                dashboards_by_category[category][group] = dashboards
+
+        # Eliminar categorías que no contienen ningún grupo con dashboards
+        dashboards_by_category = {
+            category: groups for category, groups in dashboards_by_category.items() if groups
+        }
 
         return {
             'direct_dashboards': direct_dashboards,
-            'group_dashboards_by_group': group_dashboards_by_group
+            'dashboards_by_category': dashboards_by_category
         }
-    
+
     return {}

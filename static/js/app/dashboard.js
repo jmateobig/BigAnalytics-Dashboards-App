@@ -7,7 +7,7 @@ function renderOpciones(row) {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalVer" onclick="verDashboard(${row.id})">Información</button>
-                <a class="dropdown-item" href="/dashboard/edit/${row.id}/">Editar</a>
+                <a class="dropdown-item" href="/dashboard/${row.id}/edit">Editar</a>
                 <button type="button" class="dropdown-item" onclick="confirmDeleteDashboard(${row.id}, '${row.name}')">Eliminar</button>
                 <a class="dropdown-item" href="/dashboard/render/${row.id}/">Ver</a>
             </div>

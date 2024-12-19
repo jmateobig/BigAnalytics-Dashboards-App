@@ -8,7 +8,7 @@ urlpatterns = [
     path('api/groups',               (GroupListJsonView.as_view()),         name='get_groups'),
     path('create',                   (GroupCreateView.as_view()),           name='create'),
     path('api/group/',               (GroupDetailJsonView.as_view()),       name='get_group'),
-    path('edit/<int:group_id>/',     (GroupEditView.as_view()),             name='edit'),
+    path('<int:group_id>/edit/',     (GroupEditView.as_view()),             name='edit'),
     path('api/group/delete/',        (GroupDeleteView.as_view()),           name='delete_group'),
 ]
 
