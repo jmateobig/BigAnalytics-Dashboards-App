@@ -42,8 +42,8 @@ def create_initial_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('category', '0001_initial'),
         ("user", "0001_initial"),
+        ('category', '0001_initial'),
     ]
 
     operations = [

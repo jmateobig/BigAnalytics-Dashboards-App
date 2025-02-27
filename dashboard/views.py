@@ -292,7 +292,11 @@ class DashboardRenderView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         dashboard_id = self.kwargs.get('dashboard_id')
-        dashboard = get_object_or_404(Dashboard, id=dashboard_id)
+        try:
+            dashboard = Dashboard.objects.get(id=dashboard_id)
+        except Dashboard.DoesNotExist:
+            # Puedes redirigir a una página personalizada o devolver un error 404 con un mensaje
+            return render(request, 'errors/404.html', {}, status=404)
 
         # Obtener el permiso asociado al dashboard
         permission = dashboard.permission

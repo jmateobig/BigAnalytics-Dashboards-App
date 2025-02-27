@@ -103,3 +103,34 @@
     <!-- Sidebar -left -->
 </div>
 <!-- Left Sidebar End -->
+
+<style>
+    .nav-second-level {
+        max-height: 250px;
+        overflow-y: auto;
+        scrollbar-width: thin; /* Para Firefox */
+        scrollbar-color: #aaa #f1f1f1;
+    }
+    
+    /* Scroll personalizado para Chrome, Edge y Safari */
+    .nav-second-level::-webkit-scrollbar {
+        width: 2px; /* Más delgado */
+        border-radius: 15px;
+    }
+    
+    .nav-second-level::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 15px; /* Ovalado */
+    }
+    
+    .nav-second-level::-webkit-scrollbar-thumb {
+        background: #999;
+        border-radius: 10px; /* Más ovalado */
+        transition: background 0.3s ease-in-out;
+    }
+    
+    .nav-second-level::-webkit-scrollbar-thumb:hover {
+        background: #666; /* Cambia de color al pasar el mouse */
+    }
+    
+</style>
